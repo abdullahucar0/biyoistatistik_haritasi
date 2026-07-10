@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Varyans Analizi (ANOVA) — Biyoistatistik Atlası</title>
+<meta name="description" content="İkiden fazla grubu tek testle karşılaştırmak. Fisher'ın ANOVA yöntemini interaktif olarak öğren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="tanimlayici.html">Tanımlayıcı</a>
+      <a href="korelasyon.html">Korelasyon</a>
+      <a href="regresyon.html">Regresyon</a>
+      <a href="ki-kare.html">Ki-Kare</a>
+      <a href="t-testi.html">t-Testi</a>
+      <a href="anova.html" class="aktif">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <span class="etiket">Durak 6 · 1925</span>
+      <h1>Varyans Analizi (ANOVA)</h1>
+      <p class="ozet">Üç farklı tansiyon ilacını karşılaştırmak istiyorsun. t-testini defalarca yapmak hata riskini şişirir. Fisher'ın çözümü: <strong>tek bir testle</strong> "bu gruplardan en az biri farklı mı?" diye sormak.</p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">1925</span>
+      <p class="kisi">Ronald A. Fisher</p>
+      <p>Bir tarım araştırma istasyonunda çalışıyordu; hangi gübrenin daha çok ürün verdiğini bulmaya çalışıyordu. Aynı anda birçok grubu karşılaştırmak için <strong>ANOVA</strong>'yı ve modern deney tasarımını geliştirdi.</p>
+    </aside>
+  </header>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">Tarihte neyi değiştirdi?</h2>
+    <p>
+      Fisher, bilime iki büyük armağan verdi: <strong>rastgele atama</strong> (hastaları gruplara şansa bağlı dağıtmak)
+      ve <strong>ANOVA</strong>. Bu ikisi bir araya gelince, modern <strong>kontrollü klinik araştırma</strong> doğdu.
+      Bugün üç, dört, beş tedaviyi aynı anda adil biçimde karşılaştırabiliyorsak, bu büyük ölçüde Fisher'ın tarlada
+      geliştirdiği fikirler sayesindedir. Aynı zamanda <strong>p &lt; 0,05</strong> geleneğini de yaygınlaştıran kişidir.
+    </p>
+  </section>
+
+  <h2>Fikir: gruplar arası fark mı, grup içi gürültü mü?</h2>
+  <div class="konusma">
+    <p style="margin-top:0">ANOVA iki tür değişkenliği kıyaslar:</p>
+    <p><strong>Gruplar arası:</strong> grupların ortalamaları birbirinden ne kadar uzak? (İlaçlar farklı mı?)</p>
+    <p><strong>Grup içi:</strong> aynı grubun içindeki hastalar birbirinden ne kadar farklı? (Doğal gürültü.)</p>
+    <p style="margin-bottom:0"><strong>F = gruplar arası ÷ grup içi.</strong> F büyükse gruplar gürültüden net biçimde ayrışıyor demektir → p küçülür.</p>
+  </div>
+
+  <div class="deney-masasi">
+    <h3>🔬 Deney Masası — "Üç ilacı birbirinden ayır"</h3>
+    <p>Her grupta 15 hastanın tansiyon düşüşü var. Üç ilacın <strong>ortalamalarını</strong> ve ortak
+      <strong>grup içi yayılmayı</strong> değiştir. Kutular birbirinden uzaklaşınca F büyür; yayılma artınca kutular
+      üst üste biner ve fark kaybolur.</p>
+
+    <div class="kaydirici-grubu">
+      <label for="a">A ilacı ortalama düşüş (mmHg) <output id="aDeger">10</output></label>
+      <input type="range" id="a" min="0" max="40" step="1" value="10">
+    </div>
+    <div class="kaydirici-grubu">
+      <label for="b">B ilacı ortalama düşüş (mmHg) <output id="bDeger">15</output></label>
+      <input type="range" id="b" min="0" max="40" step="1" value="15">
+    </div>
+    <div class="kaydirici-grubu">
+      <label for="c">C ilacı ortalama düşüş (mmHg) <output id="cDeger">20</output></label>
+      <input type="range" id="c" min="0" max="40" step="1" value="20">
+    </div>
+    <div class="kaydirici-grubu">
+      <label for="yayilma">Grup içi yayılma (herkes ne kadar farklı) <output id="yayilmaDeger">6</output></label>
+      <input type="range" id="yayilma" min="2" max="25" step="1" value="6">
+    </div>
+
+    <div class="grafik-kutu"><canvas id="anovaGrafik"></canvas></div>
+
+    <div class="sonuc-panosu">
+      <div class="sonuc-kutusu"><div class="deger" id="cF">–</div><div class="ad">F değeri</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cPdeg">–</div><div class="ad">p (yaklaşık)</div></div>
+      <div class="sonuc-kutusu karar"><div class="deger" id="cKarar">–</div><div class="ad">Karar</div></div>
+    </div>
+  </div>
+
+  <section class="kart vurgu-mercan">
+    <h2 style="margin-top:0">ANOVA ne söyler, ne söylemez?</h2>
+    <p>
+      ANOVA "anlamlı" dediğinde, sadece <strong>"en az bir grup diğerlerinden farklı"</strong> demiş olur —
+      hangisinin farklı olduğunu <em>söylemez</em>. Onu bulmak için sonrasında ikili karşılaştırmalar (post-hoc testler)
+      gerekir. Bu ileri adım, kardeş projede ele alınacak. Şimdilik akılda kalması gereken: ANOVA, çok grubu tek seferde,
+      hata riskini şişirmeden karşılaştırmanın adil yoludur.
+    </p>
+  </section>
+
+  <nav class="sayfa-gezinme">
+    <a href="t-testi.html">← t-Testi</a>
+    <a href="index.html">Başa dön →</a>
+  </nav>
+
+  <section class="kart vurgu-leylak" style="text-align:center">
+    <h2 style="margin-top:0">🎓 Yolculuğu tamamladın!</h2>
+    <p>Quetelet'in ortalamasından Fisher'ın ANOVA'sına kadar 90 yıllık bir keşif turunu bitirdin.
+      Daha derini — lojistik regresyon, sağkalım analizi, güç hesabı — kardeş projede seni bekliyor.</p>
+    <p><a class="ileri" href="#" title="Yakında" style="background:#ECE8FB;color:#7C6BD9;border-radius:999px;padding:8px 20px;font-weight:800;text-decoration:none;">🚧 İleri Biyoistatistik Atlası — yakında</a></p>
+  </section>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Grafiklerdeki veriler öğretim için üretilmiş örnek verilerdir.
+</footer>
+
+<script src="js/ortak.js"></script>
+<script>
+const n = 15;
+let grafik;
+
+// F dağılımı (df1=2, df2=42) için kaba p yaklaşımı — öğretim amaçlı
+function pF_yaklasik(F) {
+  // Basit, monoton azalan bir yaklaşım (gerçek F-dağılımı değil, öğretimsel gösterge)
+  if (F <= 0) return 1;
+  const z = (Math.cbrt(F) - (1 - 2/(9*42))) / Math.sqrt(2/(9*2) + Math.cbrt(F)*Math.cbrt(F)*2/(9*42));
+  return Math.max(0, Math.min(1, 1 - 0.5 * (1 + Ist.erf(z / Math.SQRT2))));
+}
+
+function ornekGrup(mu, sigma, tohum) {
+  const uret = Ist.rastgele(tohum);
+  const dizi = [];
+  for (let i = 0; i < n; i++) dizi.push(mu + sigma * Ist.normalSayi(uret));
+  return dizi;
+}
+
+function kur() {
+  const ctx = document.getElementById("anovaGrafik");
+  grafik = new Chart(ctx, {
+    type: "scatter",
+    data: {
+      datasets: [
+        { label: "A ilacı", data: [], backgroundColor: Renk.cam, pointRadius: 5 },
+        { label: "B ilacı", data: [], backgroundColor: Renk.gunes, pointRadius: 5 },
+        { label: "C ilacı", data: [], backgroundColor: Renk.leylak, pointRadius: 5 }
+      ]
+    },
+    options: {
+      scales: {
+        x: { title: { display: true, text: "İlaç grubu" }, min: 0, max: 4, ticks: { stepSize: 1, callback: v => ["","A","B","C",""][v] || "" } },
+        y: { title: { display: true, text: "Tansiyon düşüşü (mmHg)" }, min: -10, max: 50 }
+      },
+      plugins: { legend: { position: "top" } }
+    }
+  });
+  guncelle();
+}
+
+function guncelle() {
+  const muA = +document.getElementById("a").value;
+  const muB = +document.getElementById("b").value;
+  const muC = +document.getElementById("c").value;
+  const sigma = +document.getElementById("yayilma").value;
+  document.getElementById("aDeger").textContent = muA;
+  document.getElementById("bDeger").textContent = muB;
+  document.getElementById("cDeger").textContent = muC;
+  document.getElementById("yayilmaDeger").textContent = sigma;
+
+  const gA = ornekGrup(muA, sigma, 11);
+  const gB = ornekGrup(muB, sigma, 23);
+  const gC = ornekGrup(muC, sigma, 37);
+
+  const jitter = (taban, dizi) => dizi.map((y, i) => ({ x: taban + (i / n - 0.5) * 0.6, y }));
+  grafik.data.datasets[0].data = jitter(1, gA);
+  grafik.data.datasets[1].data = jitter(2, gB);
+  grafik.data.datasets[2].data = jitter(3, gC);
+  grafik.update();
+
+  // Tek yönlü ANOVA
+  const hepsi = [...gA, ...gB, ...gC];
+  const genelOrt = Ist.ortalama(hepsi);
+  const gruplar = [gA, gB, gC];
+  let ssArasi = 0, ssIci = 0;
+  gruplar.forEach(g => {
+    const m = Ist.ortalama(g);
+    ssArasi += n * (m - genelOrt) ** 2;
+    g.forEach(x => ssIci += (x - m) ** 2);
+  });
+  const dfArasi = 2, dfIci = 3 * n - 3;
+  const msArasi = ssArasi / dfArasi;
+  const msIci = ssIci / dfIci;
+  const F = msArasi / msIci;
+  const p = pF_yaklasik(F);
+
+  document.getElementById("cF").textContent = Ist.bicim(F, 2);
+  document.getElementById("cPdeg").textContent = Ist.pYazi(p);
+
+  const karar = document.getElementById("cKarar");
+  if (p < 0.05) karar.textContent = "En az bir ilaç farklı ✓";
+  else karar.textContent = "Ayırt edilemiyor";
+}
+
+["a","b","c","yayilma"].forEach(id =>
+  document.getElementById(id).addEventListener("input", guncelle)
+);
+window.addEventListener("load", kur);
+</script>
+
+</body>
+</html>

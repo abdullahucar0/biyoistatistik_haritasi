@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>t-Testi — Biyoistatistik Atlası</title>
+<meta name="description" content="İki grubun ortalaması arasındaki fark gerçek mi? Student t-testini bira fabrikasının hikâyesiyle interaktif öğren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="tanimlayici.html">Tanımlayıcı</a>
+      <a href="korelasyon.html">Korelasyon</a>
+      <a href="regresyon.html">Regresyon</a>
+      <a href="ki-kare.html">Ki-Kare</a>
+      <a href="t-testi.html" class="aktif">t-Testi</a>
+      <a href="anova.html">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <span class="etiket">Durak 5 · 1908</span>
+      <h1>t-Testi</h1>
+      <p class="ozet">Yeni bir ağrı kesici alan hastaların ağrısı ortalama 3 puan, plasebo alanlarınki 4 puan. Bu <strong>1 puanlık fark</strong> ilacın gerçek etkisi mi, yoksa hastadan hastaya doğal oynamanın gürültüsü mü?</p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">1908</span>
+      <p class="kisi">William S. Gosset<br>("Student")</p>
+      <p>Guinness bira fabrikasında kimyagerdi. Az sayıda arpa örneğiyle karar vermesi gerekiyordu. Şirket sırlarını korumak için buluşunu <strong>"Student"</strong> takma adıyla yayınladı; test bu yüzden hâlâ öyle anılır.</p>
+    </aside>
+  </header>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">Tarihte neyi değiştirdi?</h2>
+    <p>
+      Gosset'ten önce istatistik <strong>büyük örneklemler</strong> gerektiriyordu. Ama Gosset'in elinde bazen sadece
+      birkaç fıçı vardı. O, <strong>küçük örneklemlerle</strong> güvenilir karar vermenin yolunu buldu. Bu, tıp için
+      hayat kurtarıcıydı: nadir bir hastalıkta 8 hastayla, pahalı bir deneyde 12 katılımcıyla bile artık
+      "bu fark gerçek mi?" sorusuna cevap verilebiliyordu. Klinik araştırmaların temelidir.
+    </p>
+  </section>
+
+  <h2>Fikir: fark, gürültüye kıyasla ne kadar büyük?</h2>
+  <div class="konusma">
+    <p style="margin-top:0">t-testi tek bir oranı hesaplar:</p>
+    <p style="text-align:center;font-size:1.15rem"><strong>t = (iki ortalamanın farkı) ÷ (grupların içindeki doğal yayılma)</strong></p>
+    <p style="margin-bottom:0">Fark büyükse <strong>pay</strong> büyür, t büyür. Ama gruplar zaten çok dağınıksa (herkes birbirinden çok farklıysa)
+      <strong>payda</strong> büyür, t küçülür. Yani t, "sinyalin gürültüye oranı"dır.</p>
+  </div>
+
+  <div class="deney-masasi">
+    <h3>🔬 Deney Masası — "İki çan eğrisini birbirinden ayır"</h3>
+    <p>İki grubun ağrı puanı dağılımını görüyorsun. <strong>Aradaki farkı</strong> ve <strong>grupların yayılmasını</strong>
+      değiştir. İki çan eğrisi birbirinden ne kadar net ayrılırsa t o kadar büyür ve p o kadar küçülür.</p>
+
+    <div class="kaydirici-grubu">
+      <label for="fark">İki grubun ortalama farkı (puan) <output id="farkDeger">1,5</output></label>
+      <input type="range" id="fark" min="0" max="50" step="1" value="15">
+    </div>
+    <div class="kaydirici-grubu">
+      <label for="yayilma">Grupların yayılması (standart sapma) <output id="yayilmaDeger">1,5</output></label>
+      <input type="range" id="yayilma" min="5" max="40" step="1" value="15">
+    </div>
+
+    <div class="grafik-kutu"><canvas id="tGrafik"></canvas></div>
+
+    <div class="sonuc-panosu">
+      <div class="sonuc-kutusu"><div class="deger" id="cT">–</div><div class="ad">t değeri</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cP">–</div><div class="ad">p değeri</div></div>
+      <div class="sonuc-kutusu karar"><div class="deger" id="cKarar">–</div><div class="ad">Karar</div></div>
+    </div>
+  </div>
+
+  <section class="kart vurgu-sari">
+    <h2 style="margin-top:0">Buradan çıkan ders</h2>
+    <p>
+      Yayılmayı sonuna çektiğinde büyük bir farkın bile "anlamsız" çıkabildiğini gördün. İşte bu yüzden bir çalışmada
+      sadece ortalamalar arasındaki farka bakmak yetmez; <strong>o farkın grup içi değişkenliğe göre büyüklüğü</strong>
+      önemlidir. Küçük gruplarda büyük yayılma, gerçek etkiyi kolayca gizler — Gosset'in çözmeye çalıştığı sorun tam da buydu.
+    </p>
+  </section>
+
+  <nav class="sayfa-gezinme">
+    <a href="ki-kare.html">← Ki-Kare</a>
+    <a href="anova.html">Sıradaki: ANOVA →</a>
+  </nav>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Grafiklerdeki veriler öğretim için üretilmiş örnek verilerdir.
+</footer>
+
+<script src="js/ortak.js"></script>
+<script>
+const n = 20; // her grup 20 kişi
+let grafik;
+
+function egriNoktalari(mu, sigma) {
+  const noktalar = [];
+  for (let x = 0; x <= 100; x += 1) {
+    noktalar.push({ x, y: Ist.normalPdf(x, mu, sigma) });
+  }
+  return noktalar;
+}
+
+function kur() {
+  const ctx = document.getElementById("tGrafik");
+  grafik = new Chart(ctx, {
+    type: "line",
+    data: {
+      datasets: [
+        { label: "İlaç grubu", data: [], borderColor: Renk.cam, backgroundColor: Renk.camAcik, fill: true, pointRadius: 0, tension: 0.3 },
+        { label: "Plasebo grubu", data: [], borderColor: Renk.mercan, backgroundColor: Renk.mercanAcik, fill: true, pointRadius: 0, tension: 0.3 }
+      ]
+    },
+    options: {
+      parsing: false,
+      scales: {
+        x: { type: "linear", title: { display: true, text: "Ağrı puanı (0–100)" }, min: 0, max: 100 },
+        y: { title: { display: true, text: "Sıklık" }, ticks: { display: false } }
+      },
+      plugins: { legend: { position: "top" } }
+    }
+  });
+  guncelle();
+}
+
+function guncelle() {
+  const fark = +document.getElementById("fark").value;      // ham puan farkı
+  const sigma = +document.getElementById("yayilma").value;  // standart sapma
+  document.getElementById("farkDeger").textContent = Ist.bicim(fark/10, 1);
+  document.getElementById("yayilmaDeger").textContent = Ist.bicim(sigma/10, 1);
+
+  const mu1 = 40, mu2 = 40 + fark;
+  grafik.data.datasets[0].data = egriNoktalari(mu1, sigma);
+  grafik.data.datasets[1].data = egriNoktalari(mu2, sigma);
+  grafik.update();
+
+  // Bağımsız iki örneklem t (eşit varyans varsayımı, öğretim amaçlı)
+  const standartHata = sigma * Math.sqrt(2 / n);
+  const t = fark / standartHata;
+  const p = Ist.pIkiYonlu(t); // normal yaklaşımı — büyük n için makul
+
+  document.getElementById("cT").textContent = Ist.bicim(t, 2);
+  document.getElementById("cP").textContent = Ist.pYazi(p);
+
+  const karar = document.getElementById("cKarar");
+  if (p < 0.05) karar.textContent = "Fark anlamlı ✓";
+  else karar.textContent = "Gürültüye karışıyor";
+}
+
+document.getElementById("fark").addEventListener("input", guncelle);
+document.getElementById("yayilma").addEventListener("input", guncelle);
+window.addEventListener("load", kur);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tanımlayıcı İstatistik — Biyoistatistik Atlası</title>
+<meta name="description" content="Ortalama, medyan, mod ve standart sapmayı sağlık örnekleriyle ve interaktif grafiklerle öğren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="tanimlayici.html" class="aktif">Tanımlayıcı</a>
+      <a href="korelasyon.html">Korelasyon</a>
+      <a href="regresyon.html">Regresyon</a>
+      <a href="ki-kare.html">Ki-Kare</a>
+      <a href="t-testi.html">t-Testi</a>
+      <a href="anova.html">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <span class="etiket">Durak 1 · 1835</span>
+      <h1>Tanımlayıcı İstatistik</h1>
+      <p class="ozet">Elinde 30 hastanın ateşi var. Hepsini tek tek okumak yerine, bu yığını <strong>tek bir sayıyla</strong> nasıl özetlersin? İşte istatistiğin ilk ve en temel işi bu.</p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">1835</span>
+      <p class="kisi">Adolphe Quetelet</p>
+      <p>Belçikalı gökbilimci. Yıldızları ölçmek için kullanılan "ortalama" fikrini insanlara uyguladı ve "ortalama insan" kavramını ortaya attı. Bugün hâlâ kullandığımız <strong>Vücut Kitle İndeksi (BKİ)</strong> onun fikridir.</p>
+    </aside>
+  </header>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">Tarihte neyi değiştirdi?</h2>
+    <p>
+      Quetelet'ten önce "ortalama", sadece gökbilimcilerin bir yıldızın yerini birçok ölçümün ortasını alarak bulmak için
+      kullandığı bir numaraydı. Quetelet bunu insana çevirdi: bir toplumun boyunu, kilosunu, hatta suç oranını ortalamayla
+      tarif etti. Böylece <strong>"tek bir kişi değil, bir topluluk nasıl davranır?"</strong> sorusu bilimsel olarak
+      sorulabildi. Halk sağlığı da tam burada, bu fikrin üstünde doğdu.
+    </p>
+  </section>
+
+  <h2>Önce sezgi: dört basit ölçü</h2>
+
+  <div class="konusma">
+    <p style="margin-top:0"><strong>Bir koğuşta 5 hastanın nabzı:</strong> 70, 72, 75, 78, 80 (atım/dakika)</p>
+    <p><strong>Ortalama</strong> — hepsini topla, sayıya böl. Yükü eşit dağıtınca herkese ne düşer? → (70+72+75+78+80)/5 = <strong>75</strong></p>
+    <p><strong>Medyan</strong> — sıraya diz, tam ortadaki. Yarısı bundan küçük, yarısı büyük. → <strong>75</strong></p>
+    <p><strong>Mod</strong> — en sık tekrar eden değer. (Burada tekrar yok.)</p>
+    <p style="margin-bottom:0"><strong>Standart sapma</strong> — sayılar ortalamanın çevresine ne kadar yayılmış? Herkes 75'e yakınsa küçük; kimi 40 kimi 120 ise büyük.</p>
+  </div>
+
+  <div class="deney-masasi">
+    <h3>🔬 Deney Masası — "Tek zengin hasta ortalamayı nasıl kandırır?"</h3>
+    <p>Bir mahalle sağlık ocağına gelen 20 kişinin aylık ilaç harcamasını görüyorsun. Çoğu birbirine yakın.
+      Şimdi <strong>tek bir kişinin</strong> harcamasını kaydırıcıyla uça çek (mesela çok pahalı bir tedavi) ve
+      <strong>ortalama ile medyanın</strong> nasıl ayrıştığına bak.</p>
+
+    <div class="kaydirici-grubu">
+      <label for="aykiri">Son kişinin harcaması (₺) <output id="aykiriDeger">300</output></label>
+      <input type="range" id="aykiri" min="300" max="20000" step="100" value="300">
+    </div>
+
+    <div class="grafik-kutu"><canvas id="histGrafik"></canvas></div>
+
+    <div class="sonuc-panosu">
+      <div class="sonuc-kutusu"><div class="deger" id="cOrt">–</div><div class="ad">Ortalama</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cMed">–</div><div class="ad">Medyan</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cSS">–</div><div class="ad">Standart sapma</div></div>
+      <div class="sonuc-kutusu karar"><div class="deger" id="cKarar">–</div><div class="ad">Ne oldu?</div></div>
+    </div>
+  </div>
+
+  <section class="kart vurgu-sari">
+    <h2 style="margin-top:0">Buradan çıkan ders</h2>
+    <p>
+      Kaydırıcıyı sonuna çektiğinde <strong>ortalama fırladı ama medyan neredeyse hiç kıpırdamadı.</strong>
+      İşte bu yüzden gelir, harcama veya hastane yatış süresi gibi "birkaç aşırı değerin çektiği" verilerde
+      doktorlar ve halk sağlıkçıları çoğu zaman ortalama yerine <strong>medyanı</strong> tercih eder.
+      Ortalama yalan söylemez ama tek bir aşırı hastadan kolayca etkilenir.
+    </p>
+  </section>
+
+  <nav class="sayfa-gezinme">
+    <a href="index.html">← Ana Sayfa</a>
+    <a href="korelasyon.html">Sıradaki: Korelasyon →</a>
+  </nav>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Grafiklerdeki veriler öğretim için üretilmiş örnek verilerdir.
+</footer>
+
+<script src="js/ortak.js"></script>
+<script>
+const temel = [280,300,310,320,290,305,315,295,325,300,310,285,320,300,315,295,305,310,300,290];
+let grafik;
+
+function kur() {
+  const ctx = document.getElementById("histGrafik");
+  grafik = new Chart(ctx, {
+    type: "bar",
+    data: { labels: [], datasets: [{ label: "Kişi sayısı", data: [], backgroundColor: Renk.camAcik, borderColor: Renk.cam, borderWidth: 2 }] },
+    options: {
+      scales: {
+        x: { title: { display: true, text: "Aylık ilaç harcaması (₺)" }, grid: { display: false } },
+        y: { title: { display: true, text: "Kaç kişi" }, beginAtZero: true, ticks: { stepSize: 1 } }
+      },
+      plugins: {
+        legend: { display: false },
+        annotationYok: true
+      }
+    }
+  });
+  guncelle();
+}
+
+function histogram(veri, kutuSayisi, min, max) {
+  const genislik = (max - min) / kutuSayisi;
+  const kutular = new Array(kutuSayisi).fill(0);
+  const etiket = [];
+  for (let i = 0; i < kutuSayisi; i++) etiket.push(Math.round(min + i * genislik));
+  veri.forEach(v => {
+    let k = Math.floor((v - min) / genislik);
+    if (k >= kutuSayisi) k = kutuSayisi - 1;
+    if (k < 0) k = 0;
+    kutular[k]++;
+  });
+  return { etiket, kutular };
+}
+
+function guncelle() {
+  const aykiri = +document.getElementById("aykiri").value;
+  document.getElementById("aykiriDeger").textContent = aykiri.toLocaleString("tr-TR");
+  const veri = [...temel, aykiri];
+
+  const ort = Ist.ortalama(veri);
+  const med = Ist.medyan(veri);
+  const ss = Ist.ss(veri);
+
+  const { etiket, kutular } = histogram(veri, 12, 250, Math.max(2000, aykiri + 200));
+  grafik.data.labels = etiket.map(e => e.toLocaleString("tr-TR"));
+  grafik.data.datasets[0].data = kutular;
+  grafik.update();
+
+  document.getElementById("cOrt").textContent = "₺" + Ist.bicim(ort, 0);
+  document.getElementById("cMed").textContent = "₺" + Ist.bicim(med, 0);
+  document.getElementById("cSS").textContent = "₺" + Ist.bicim(ss, 0);
+
+  const fark = ort - med;
+  const karar = document.getElementById("cKarar");
+  if (fark < 30) karar.textContent = "İkisi de yakın 👍";
+  else if (fark < 400) karar.textContent = "Ortalama kaymaya başladı";
+  else karar.textContent = "Ortalama yanıltıyor! Medyanı kullan";
+}
+
+document.getElementById("aykiri").addEventListener("input", guncelle);
+window.addEventListener("load", kur);
+</script>
+
+</body>
+</html>

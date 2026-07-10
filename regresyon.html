@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basit Doğrusal Regresyon — Biyoistatistik Atlası</title>
+<meta name="description" content="İlişkiyi bir doğruya çevirip tahmin yapmak. En küçük kareler yöntemini interaktif olarak öğren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="tanimlayici.html">Tanımlayıcı</a>
+      <a href="korelasyon.html">Korelasyon</a>
+      <a href="regresyon.html" class="aktif">Regresyon</a>
+      <a href="ki-kare.html">Ki-Kare</a>
+      <a href="t-testi.html">t-Testi</a>
+      <a href="anova.html">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <span class="etiket">Durak 3 · 1886</span>
+      <h1>Basit Doğrusal Regresyon</h1>
+      <p class="ozet">Korelasyon "ilişki var" der. Regresyon bir adım öteye geçer: ilişkiyi bir <strong>doğruya</strong> çevirir ve <strong>tahmin</strong> yaptırır. "50 yaşındaki birinin tansiyonu kaç olur?" sorusuna cevap verir.</p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">1886</span>
+      <p class="kisi">Francis Galton</p>
+      <p>Uzun boylu babaların oğullarının biraz daha kısa olduğunu fark etti: değerler ortalamaya doğru "geri çekiliyordu". Bu <strong>"ortalamaya regresyon"</strong> gözlemi yönteme adını verdi.</p>
+    </aside>
+  </header>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">Tarihte neyi değiştirdi?</h2>
+    <p>
+      Galton'ın öğrencisi ve arkadaşı Pearson bu fikri sağlam bir matematiğe oturttu. Böylece tıp, ilk kez
+      bir ölçümden diğerini <strong>öngörebilir</strong> hale geldi: doz–etki eğrileri, büyüme çizelgeleri,
+      risk hesaplayıcıları... hepsinin altında bu basit doğru yatar. "Regresyon" kelimesi bugün
+      istatistiğin belki de en çok kullanılan aracının adıdır.
+    </p>
+  </section>
+
+  <h2>Fikir: en az hata yapan doğru</h2>
+  <div class="konusma">
+    <p style="margin-top:0">Noktaların arasından bir doğru geçireceğiz. Ama hangisi "en iyi" doğru?</p>
+    <p>Her noktanın doğruya olan dikey uzaklığı bir <strong>hatadır</strong>. Bu hataların karelerini toplarız
+      (kare alırız ki eksiler artılara karışıp birbirini yok etmesin).</p>
+    <p style="margin-bottom:0"><strong>En iyi doğru = bu hata karelerinin toplamını en küçük yapan doğru.</strong>
+      Adı da buradan gelir: "en küçük kareler".</p>
+  </div>
+
+  <div class="deney-masasi">
+    <h3>🔬 Deney Masası — "En iyi doğruyu sen bul, sonra bilgisayarla yarış"</h3>
+    <p>15 hastanın <strong>yaşı</strong> ile <strong>sistolik tansiyonu</strong>. Kaydırıcılarla kendi doğrunun
+      eğimini ve başlangıcını ayarla; kırmızı çubuklar senin hatalarını gösterir. Hata toplamını küçültmeye çalış,
+      sonra "Bilgisayarın çözümü" düğmesine bas.</p>
+
+    <div class="kaydirici-grubu">
+      <label for="egim">Doğrunun eğimi (yaş başına tansiyon) <output id="egimDeger">0,5</output></label>
+      <input type="range" id="egim" min="-50" max="200" step="1" value="50">
+    </div>
+    <div class="kaydirici-grubu">
+      <label for="kesisim">Başlangıç değeri (20 yaşta tansiyon) <output id="kesisimDeger">110</output></label>
+      <input type="range" id="kesisim" min="80" max="160" step="1" value="110">
+    </div>
+    <button class="dugme" id="cozum">🤖 Bilgisayarın çözümünü göster</button>
+
+    <div class="grafik-kutu"><canvas id="regGrafik"></canvas></div>
+
+    <div class="sonuc-panosu">
+      <div class="sonuc-kutusu"><div class="deger" id="cHata">–</div><div class="ad">Senin hata toplamın</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cEnIyi">–</div><div class="ad">En düşük mümkün</div></div>
+      <div class="sonuc-kutusu karar"><div class="deger" id="cTahmin">–</div><div class="ad">65 yaş tahmini</div></div>
+    </div>
+  </section>
+
+  <section class="kart vurgu-sari">
+    <h2 style="margin-top:0">Buradan çıkan ders</h2>
+    <p>
+      Doğruyu bulduğunda, verinde <strong>hiç olmayan</strong> bir yaş için bile tahmin yapabilirsin — işte
+      regresyonun gücü budur. Ama dikkat: doğru sadece verinin olduğu aralıkta güvenilirdir. 20–70 yaş arası
+      veriyle 5 yaşındaki bir çocuğun tansiyonunu tahmin etmeye kalkmak (buna <strong>dışdeğerleme</strong> denir)
+      seni yanıltır.
+    </p>
+  </section>
+
+  <nav class="sayfa-gezinme">
+    <a href="korelasyon.html">← Korelasyon</a>
+    <a href="ki-kare.html">Sıradaki: Ki-Kare →</a>
+  </nav>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Grafiklerdeki veriler öğretim için üretilmiş örnek verilerdir.
+</footer>
+
+<script src="js/ortak.js"></script>
+<script>
+const yaslar = [22,28,31,35,38,42,45,48,52,55,58,62,65,68,72];
+const tansiyon = [118,120,124,122,128,130,132,138,135,142,145,148,150,155,158];
+let grafik;
+
+function kur() {
+  const ctx = document.getElementById("regGrafik");
+  grafik = new Chart(ctx, {
+    data: {
+      datasets: [
+        { type: "scatter", label: "Hasta", data: yaslar.map((y,i)=>({x:y,y:tansiyon[i]})), backgroundColor: Renk.cam, pointRadius: 5, order: 1 },
+        { type: "line", label: "Senin doğrun", data: [], borderColor: Renk.mercan, borderWidth: 3, pointRadius: 0, order: 2 }
+      ]
+    },
+    options: {
+      scales: {
+        x: { title: { display: true, text: "Yaş" }, min: 18, max: 75 },
+        y: { title: { display: true, text: "Sistolik tansiyon (mmHg)" }, min: 100, max: 170 }
+      },
+      plugins: { legend: { display: true, position: "top" } }
+    }
+  });
+  guncelle();
+}
+
+function hataToplam(egim, kesisim) {
+  // kesisim burada 20 yaştaki değer olarak tanımlı
+  let t = 0;
+  for (let i = 0; i < yaslar.length; i++) {
+    const tahmin = kesisim + egim * (yaslar[i] - 20);
+    t += (tansiyon[i] - tahmin) ** 2;
+  }
+  return t;
+}
+
+function guncelle() {
+  const egim = +document.getElementById("egim").value / 100;
+  const kesisim = +document.getElementById("kesisim").value;
+  document.getElementById("egimDeger").textContent = Ist.bicim(egim, 2);
+  document.getElementById("kesisimDeger").textContent = kesisim;
+
+  grafik.data.datasets[1].data = [
+    { x: 18, y: kesisim + egim * (18 - 20) },
+    { x: 75, y: kesisim + egim * (75 - 20) }
+  ];
+  grafik.update();
+
+  const hata = hataToplam(egim, kesisim);
+  document.getElementById("cHata").textContent = Ist.bicim(hata, 0);
+
+  // Gerçek en küçük kareler çözümü
+  const { egim: eg, kesisim: kg } = Ist.enKucukKareler(yaslar, tansiyon);
+  const enIyiKesisim20 = kg + eg * 20;
+  const enIyiHata = hataToplam(eg, enIyiKesisim20);
+  document.getElementById("cEnIyi").textContent = Ist.bicim(enIyiHata, 0);
+
+  const tahmin65 = kesisim + egim * (65 - 20);
+  document.getElementById("cTahmin").textContent = Ist.bicim(tahmin65, 0) + " mmHg";
+}
+
+document.getElementById("egim").addEventListener("input", guncelle);
+document.getElementById("kesisim").addEventListener("input", guncelle);
+document.getElementById("cozum").addEventListener("click", () => {
+  const { egim: eg, kesisim: kg } = Ist.enKucukKareler(yaslar, tansiyon);
+  document.getElementById("egim").value = Math.round(eg * 100);
+  document.getElementById("kesisim").value = Math.round(kg + eg * 20);
+  guncelle();
+});
+window.addEventListener("load", kur);
+</script>
+
+</body>
+</html>

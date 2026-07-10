@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Korelasyon — Biyoistatistik Atlası</title>
+<meta name="description" content="İki değişken birlikte mi değişiyor? Pearson korelasyon katsayısını (r) interaktif serpme grafiğiyle öğren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="tanimlayici.html">Tanımlayıcı</a>
+      <a href="korelasyon.html" class="aktif">Korelasyon</a>
+      <a href="regresyon.html">Regresyon</a>
+      <a href="ki-kare.html">Ki-Kare</a>
+      <a href="t-testi.html">t-Testi</a>
+      <a href="anova.html">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <span class="etiket">Durak 2 · 1896</span>
+      <h1>Korelasyon</h1>
+      <p class="ozet">Sigara içtikçe öksürük artıyor mu? Boy uzadıkça kilo da artıyor mu? İki şeyin <strong>birlikte değişip değişmediğini</strong> ve bunun ne kadar güçlü olduğunu tek bir sayıyla ölçelim: <strong>r</strong>.</p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">1896</span>
+      <p class="kisi">Karl Pearson</p>
+      <p>İngiliz matematikçi. Galton'ın "birlikte değişim" fikrini kesin bir formüle döktü. Bugün "r" ile gösterdiğimiz katsayı onun adını taşır: <strong>Pearson korelasyon katsayısı.</strong></p>
+    </aside>
+  </header>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">Tarihte neyi değiştirdi?</h2>
+    <p>
+      Pearson'dan önce insanlar "şu şununla ilgili görünüyor" derdi ama bunu <strong>sayıyla</strong> söyleyemezlerdi.
+      Pearson, ilişkinin gücünü –1 ile +1 arasında tek bir sayıya sıkıştırdı. Bu, tıp için devrimdi: artık
+      "kolesterol yüksekliği ile kalp krizi ne kadar ilişkili?" gibi bir soru <strong>ölçülebilir</strong> hale geldi.
+      İstatistiğin ayrı bir bilim dalı olarak doğması büyük ölçüde Pearson'ın laboratuvarında oldu.
+    </p>
+  </section>
+
+  <h2>r ne anlatır?</h2>
+  <div class="konusma">
+    <p style="margin-top:0"><strong>r = +1</strong> → biri artınca diğeri kusursuz artar (tam yukarı doğru bir çizgi).</p>
+    <p><strong>r = 0</strong> → hiçbir ilişki yok, noktalar dağınık bir buluta benzer.</p>
+    <p><strong>r = –1</strong> → biri artınca diğeri kusursuz azalır (tam aşağı doğru bir çizgi).</p>
+    <p style="margin-bottom:0">Sağlıkta gerçek veriler asla tam +1 olmaz; 0,3 zayıf, 0,6 orta, 0,8 üzeri güçlü kabul edilir.</p>
+  </div>
+
+  <div class="deney-masasi">
+    <h3>🔬 Deney Masası — "İlişkiyi kendi elinle güçlendir"</h3>
+    <p>Aşağıda 40 kişinin <strong>günlük sigara sayısı</strong> ile <strong>akciğer kapasitesi testi</strong> puanı var.
+      Kaydırıcıyla ilişkinin gücünü değiştir. Noktalar nasıl bir çizgiye toplanıyor ya da dağılıyor, r nasıl değişiyor gör.</p>
+
+    <div class="kaydirici-grubu">
+      <label for="rHedef">İlişkinin gücü (gizli gerçek) <output id="rHedefDeger">-0,80</output></label>
+      <input type="range" id="rHedef" min="-95" max="95" step="5" value="-80">
+    </div>
+    <button class="dugme ikincil" id="yeniOrneklem">🎲 Yeni hasta grubu çek</button>
+
+    <div class="grafik-kutu"><canvas id="serpmeGrafik"></canvas></div>
+
+    <div class="sonuc-panosu">
+      <div class="sonuc-kutusu"><div class="deger" id="cR">–</div><div class="ad">Hesaplanan r</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cGuc">–</div><div class="ad">Gücü</div></div>
+      <div class="sonuc-kutusu karar"><div class="deger" id="cYon">–</div><div class="ad">Yön</div></div>
+    </div>
+  </div>
+
+  <section class="kart vurgu-mercan">
+    <h2 style="margin-top:0">⚠️ En önemli uyarı: ilişki ≠ neden</h2>
+    <p>
+      Dondurma satışı ile boğulma vakaları birlikte artar (r yüksek çıkar). Peki dondurma mı boğar? Hayır —
+      ikisini de <strong>yaz sıcağı</strong> artırır. Korelasyon iki şeyin birlikte hareket ettiğini söyler ama
+      <strong>"biri diğerinin sebebi"</strong> demez. Bu ayrımı karıştırmak, tıptaki en sık hatalardan biridir.
+    </p>
+  </section>
+
+  <nav class="sayfa-gezinme">
+    <a href="tanimlayici.html">← Tanımlayıcı</a>
+    <a href="regresyon.html">Sıradaki: Regresyon →</a>
+  </nav>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Grafiklerdeki veriler öğretim için üretilmiş örnek verilerdir.
+</footer>
+
+<script src="js/ortak.js"></script>
+<script>
+let grafik, tohum = 7;
+
+function veriUret(r, tohumDeger) {
+  const uret = Ist.rastgele(tohumDeger);
+  const noktalar = [];
+  const xler = [], yler = [];
+  for (let i = 0; i < 40; i++) {
+    const z1 = Ist.normalSayi(uret);
+    const z2 = Ist.normalSayi(uret);
+    const x = z1;
+    const y = r * z1 + Math.sqrt(1 - r * r) * z2;
+    // Sağlık bağlamına ölçekle: x = sigara (0-40), y = akciğer puanı (40-100)
+    const sigara = Math.max(0, Math.min(40, 20 + x * 9));
+    const puan = Math.max(30, Math.min(100, 70 + y * 12));
+    noktalar.push({ x: sigara, y: puan });
+    xler.push(sigara); yler.push(puan);
+  }
+  return { noktalar, xler, yler };
+}
+
+function kur() {
+  const ctx = document.getElementById("serpmeGrafik");
+  grafik = new Chart(ctx, {
+    type: "scatter",
+    data: { datasets: [{ label: "Hasta", data: [], backgroundColor: Renk.leylak, pointRadius: 5 }] },
+    options: {
+      scales: {
+        x: { title: { display: true, text: "Günlük sigara (adet)" }, min: 0, max: 40 },
+        y: { title: { display: true, text: "Akciğer kapasitesi puanı" }, min: 30, max: 100 }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+  guncelle();
+}
+
+function guncelle() {
+  const r = +document.getElementById("rHedef").value / 100;
+  document.getElementById("rHedefDeger").textContent = Ist.bicim(r, 2);
+  const { noktalar, xler, yler } = veriUret(r, tohum);
+  grafik.data.datasets[0].data = noktalar;
+  grafik.update();
+
+  const rHes = Ist.korelasyon(xler, yler);
+  document.getElementById("cR").textContent = Ist.bicim(rHes, 2);
+
+  const mutlak = Math.abs(rHes);
+  let guc = "Yok denecek kadar";
+  if (mutlak >= 0.8) guc = "Güçlü";
+  else if (mutlak >= 0.5) guc = "Orta";
+  else if (mutlak >= 0.3) guc = "Zayıf";
+  document.getElementById("cGuc").textContent = guc;
+
+  document.getElementById("cYon").textContent = rHes > 0.05 ? "Birlikte artıyor ↗" : rHes < -0.05 ? "Ters çalışıyor ↘" : "İlişki yok →";
+}
+
+document.getElementById("rHedef").addEventListener("input", guncelle);
+document.getElementById("yeniOrneklem").addEventListener("click", () => { tohum = (tohum * 16807 + 17) % 2147483647; guncelle(); });
+window.addEventListener("load", kur);
+</script>
+
+</body>
+</html>

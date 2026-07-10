@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ki-Kare Testi — Biyoistatistik Atlası</title>
+<meta name="description" content="İki grup arasındaki fark şans eseri mi? Ki-kare testini aşı örneğiyle interaktif olarak öğren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="tanimlayici.html">Tanımlayıcı</a>
+      <a href="korelasyon.html">Korelasyon</a>
+      <a href="regresyon.html">Regresyon</a>
+      <a href="ki-kare.html" class="aktif">Ki-Kare</a>
+      <a href="t-testi.html">t-Testi</a>
+      <a href="anova.html">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <span class="etiket">Durak 4 · 1900</span>
+      <h1>Ki-Kare Testi</h1>
+      <p class="ozet">Aşı olan 100 kişiden 10'u, olmayan 100 kişiden 30'u hastalandı. Bu fark <strong>gerçek bir koruma mı</strong>, yoksa sadece şans eseri mi? Ki-kare testi sayım verileri için tam bunu ölçer.</p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">1900</span>
+      <p class="kisi">Karl Pearson</p>
+      <p>Korelasyondan sonra Pearson bir soru daha çözdü: "Gözlediğim sayılar, "hiçbir ilişki yok" varsayımından ne kadar sapıyor?" Cevabı <strong>ki-kare (χ²)</strong> testi oldu — ilk modern hipotez testlerinden biri.</p>
+    </aside>
+  </header>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">Tarihte neyi değiştirdi?</h2>
+    <p>
+      Ki-kare, "elimdeki fark tesadüf olabilir mi?" sorusuna <strong>sayısal bir cevap</strong> veren ilk yaygın araçtı.
+      Öncesinde bilim insanları tablolara bakıp "bence anlamlı" derdi; Pearson bunu bir kurala bağladı. Bugün bir aşının,
+      bir tedavinin ya da bir risk faktörünün işe yarayıp yaramadığını gösteren tablolar hâlâ çoğunlukla bu testle sınanır.
+    </p>
+  </section>
+
+  <h2>Mantık: "beklenen" ile "gözlenen"</h2>
+  <div class="konusma">
+    <p style="margin-top:0"><strong>Boş varsayım (H₀):</strong> "Aşının hiçbir etkisi yok." Eğer bu doğruysa, iki grupta da hastalık oranı aynı olmalı.</p>
+    <p><strong>Beklenen sayılar:</strong> "Etki yok" doğru olsaydı her kutuda kaç kişi olurdu?</p>
+    <p style="margin-bottom:0"><strong>Ki-kare:</strong> gözlediğimiz gerçek sayılar bu "beklenen"den ne kadar uzak? Uzaklık büyükse, "etki yok" varsayımı zorlanır ve <strong>p küçülür</strong>.</p>
+  </div>
+
+  <div class="deney-masasi">
+    <h3>🔬 Deney Masası — "Farkı büyüt, testi zorla"</h3>
+    <p>Her grupta 100 kişi var. Aşısız grupta 30 kişi hastalanıyor (sabit). Sen <strong>aşılı gruptaki hasta sayısını</strong>
+      kaydırıcıyla değiştir. Fark küçükken test "olabilir, şanstır" der; fark büyüdükçe p düşer ve test "bu tesadüf değil!" der.</p>
+
+    <div class="kaydirici-grubu">
+      <label for="asiliHasta">Aşılı gruptaki hasta sayısı (100 kişiden) <output id="asiliDeger">10</output></label>
+      <input type="range" id="asiliHasta" min="0" max="60" step="1" value="10">
+    </div>
+
+    <div class="grafik-kutu"><canvas id="kiGrafik"></canvas></div>
+
+    <table class="veri">
+      <thead><tr><th></th><th>Hasta oldu</th><th>Sağlıklı</th></tr></thead>
+      <tbody>
+        <tr><th>Aşılı</th><td id="t_ah">10</td><td id="t_as">90</td></tr>
+        <tr><th>Aşısız</th><td>30</td><td>70</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sonuc-panosu">
+      <div class="sonuc-kutusu"><div class="deger" id="cKi">–</div><div class="ad">χ² değeri</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cP">–</div><div class="ad">p değeri</div></div>
+      <div class="sonuc-kutusu karar"><div class="deger" id="cKarar">–</div><div class="ad">Karar</div></div>
+    </div>
+  </div>
+
+  <section class="kart vurgu-mercan">
+    <h2 style="margin-top:0">p değeri ne demek (ve ne demek değil)?</h2>
+    <p>
+      <strong>p = 0,03</strong> şu demektir: "Aşının gerçekten hiçbir etkisi olmasaydı, böyle bir farkı (ya da daha büyüğünü)
+      sırf şans eseri görme olasılığı %3'tür." Bu olasılık küçük olduğu için "herhalde etki gerçek" deriz. Gelenek olarak
+      <strong>p &lt; 0,05</strong> sınırı kullanılır. Ama p, "aşı %97 işe yarıyor" demek <em>değildir</em> — sadece
+      farkın tesadüf olma ihtimalini anlatır.
+    </p>
+  </section>
+
+  <nav class="sayfa-gezinme">
+    <a href="regresyon.html">← Regresyon</a>
+    <a href="t-testi.html">Sıradaki: t-Testi →</a>
+  </nav>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Grafiklerdeki veriler öğretim için üretilmiş örnek verilerdir.
+</footer>
+
+<script src="js/ortak.js"></script>
+<script>
+let grafik;
+
+function kur() {
+  const ctx = document.getElementById("kiGrafik");
+  grafik = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Aşılı grup", "Aşısız grup"],
+      datasets: [
+        { label: "Hasta oldu", data: [10, 30], backgroundColor: Renk.mercan },
+        { label: "Sağlıklı", data: [90, 70], backgroundColor: Renk.cam }
+      ]
+    },
+    options: {
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, title: { display: true, text: "Kişi sayısı" }, max: 100 }
+      },
+      plugins: { legend: { position: "top" } }
+    }
+  });
+  guncelle();
+}
+
+function guncelle() {
+  const ah = +document.getElementById("asiliHasta").value; // aşılı hasta
+  document.getElementById("asiliDeger").textContent = ah;
+  const as = 100 - ah;          // aşılı sağlıklı
+  const bh = 30, bs = 70;       // aşısız hasta / sağlıklı (sabit)
+
+  document.getElementById("t_ah").textContent = ah;
+  document.getElementById("t_as").textContent = as;
+
+  grafik.data.datasets[0].data = [ah, bh];
+  grafik.data.datasets[1].data = [as, bs];
+  grafik.update();
+
+  // 2x2 ki-kare (Yates düzeltmesiz, öğretim amaçlı)
+  const toplam = 200;
+  const satirA = 100, satirB = 100;
+  const sutunH = ah + bh, sutunS = as + bs;
+  const gozlenen = [ah, as, bh, bs];
+  const beklenen = [
+    satirA * sutunH / toplam, satirA * sutunS / toplam,
+    satirB * sutunH / toplam, satirB * sutunS / toplam
+  ];
+  let ki = 0;
+  for (let i = 0; i < 4; i++) ki += (gozlenen[i] - beklenen[i]) ** 2 / beklenen[i];
+  const p = Ist.pKiKare1(ki);
+
+  document.getElementById("cKi").textContent = Ist.bicim(ki, 2);
+  document.getElementById("cP").textContent = Ist.pYazi(p);
+
+  const karar = document.getElementById("cKarar");
+  if (p < 0.05) karar.textContent = "Fark anlamlı ✓ (tesadüf değil)";
+  else karar.textContent = "Anlamsız — şans olabilir";
+}
+
+document.getElementById("asiliHasta").addEventListener("input", guncelle);
+window.addEventListener("load", kur);
+</script>
+
+</body>
+</html>
