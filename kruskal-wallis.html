@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kruskal-Wallis Testi — Biyoistatistik Atlası</title>
+<meta name="description" content="İkiden fazla bağımsız grubu sıralarla karşılaştırmak. One-way ANOVA'nın sıra temelli ikizi Kruskal-Wallis'i interaktif öğren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="karar-agaci.html">Karar Ağacı</a>
+      <a href="tanimlayici.html">Tanımlayıcı</a>
+      <a href="korelasyon.html">Korelasyon</a>
+      <a href="regresyon.html">Regresyon</a>
+      <a href="ki-kare.html">Ki-Kare</a>
+      <a href="t-testi.html">t-Testi</a>
+      <a href="anova.html">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <div class="karar-yol">
+        <a href="karar-agaci.html" class="parca">Sayısal</a><span class="ok">→</span>
+        <span class="parca">&gt;2 Grup</span><span class="ok">→</span>
+        <span class="parca">Bağımsız</span><span class="ok">→</span>
+        <span class="parca son">Kruskal-Wallis</span>
+      </div>
+      <h1>Kruskal-Wallis Testi</h1>
+      <p class="ozet">Üç ayrı ildeki hastaların iyileşme süreleri farklı mı? One-way ANOVA'nın sıra temelli ikizi: üçten fazla bağımsız grubu, tüm değerleri <strong>birlikte sıralayarak</strong> karşılaştırır.</p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">1952</span>
+      <p class="kisi">William Kruskal &<br>W. Allen Wallis</p>
+      <p>Mann-Whitney'in ikiden çok gruba genişlemiş hali. "Birkaç grubu birden, dağılım varsayımı yapmadan nasıl karşılaştırırız?" sorusunu <strong>H istatistiği</strong> ile çözdüler.</p>
+    </aside>
+  </header>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">Fikir: hepsini tek sıraya diz, grup grup topla</h2>
+    <p>
+      Üç grubun tüm değerlerini tek bir uzun sıraya dizersin (en küçük 1, en büyük son). Sonra her grubun aldığı
+      sıraları toplarsın. Eğer gruplar birbirine benziyorsa, her grup sıralamada <strong>karışık</strong> yerlere düşer
+      ve toplamları birbirine yakın olur. Ama bir grup sürekli alt sıralarda, bir diğeri sürekli üst sıralarda kalıyorsa,
+      grupların sıra toplamları belirgin biçimde ayrışır — işte <strong>H</strong> bu ayrışmayı ölçer.
+    </p>
+  </section>
+
+  <div class="deney-masasi">
+    <h3>🔬 Deney Masası — "Üç grubu birbirinden ayır"</h3>
+    <p>Üç ilin hastalarının iyileşme süreleri. Grupların <strong>merkezlerini birbirinden uzaklaştır</strong>: dağılımlar
+      ayrıştıkça sıra toplamları da ayrışır, H büyür ve p düşer.</p>
+
+    <div class="kaydirici-grubu">
+      <label for="ayrim">Gruplar arası merkez farkı (gün) <output id="ayrimDeger">3</output></label>
+      <input type="range" id="ayrim" min="0" max="10" step="1" value="3">
+    </div>
+    <button class="dugme ikincil" id="yeni">🎲 Yeni hasta grupları çek</button>
+
+    <div class="grafik-kutu"><canvas id="kwGrafik"></canvas></div>
+
+    <div class="sonuc-panosu">
+      <div class="sonuc-kutusu"><div class="deger" id="cH">–</div><div class="ad">H istatistiği</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cP">–</div><div class="ad">p değeri</div></div>
+      <div class="sonuc-kutusu karar"><div class="deger" id="cKarar">–</div><div class="ad">Karar</div></div>
+    </div>
+  </div>
+
+  <div class="ikiz-kart">
+    <div class="rozet">👯</div>
+    <div class="ic">
+      <h3>İkizi: One-way ANOVA</h3>
+      <p>Gruplar normal dağılıyorsa ve varyansları benzerse, ortalamaları karşılaştıran ANOVA daha güçlüdür.</p>
+    </div>
+    <a class="dugme-ikiz" href="anova.html">One-way ANOVA →</a>
+  </div>
+
+  <nav class="sayfa-gezinme">
+    <a href="friedman.html">← Friedman</a>
+    <a href="mcnemar.html">Sıradaki: McNemar →</a>
+  </nav>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Grafiklerdeki veriler öğretim için üretilmiş örnek verilerdir.
+</footer>
+
+<script src="js/ortak.js"></script>
+<script>
+let grafik, tohum = 9;
+
+function grupUret(merkez, tohumD) {
+  const uret = Ist.rastgele(tohumD);
+  const dizi = [];
+  for (let i = 0; i < 10; i++) dizi.push(Math.max(1, merkez + 2.2 * Ist.normalSayi(uret)));
+  return dizi;
+}
+
+function kur() {
+  const ctx = document.getElementById("kwGrafik");
+  grafik = new Chart(ctx, {
+    type: "scatter",
+    data: {
+      datasets: [
+        { label: "İl A", data: [], backgroundColor: Renk.cam, pointRadius: 6 },
+        { label: "İl B", data: [], backgroundColor: Renk.gunes, pointRadius: 6 },
+        { label: "İl C", data: [], backgroundColor: Renk.leylak, pointRadius: 6 }
+      ]
+    },
+    options: {
+      scales: {
+        x: { title: { display: true, text: "İyileşme süresi (gün)" }, min: 0, max: 30 },
+        y: { min: 0, max: 4, ticks: { callback: v => ["", "A", "B", "C", ""][v] || "" }, title: { display: true, text: "İl" } }
+      },
+      plugins: { legend: { position: "top" } }
+    }
+  });
+  guncelle();
+}
+
+function guncelle() {
+  const ayrim = +document.getElementById("ayrim").value;
+  document.getElementById("ayrimDeger").textContent = ayrim;
+
+  const A = grupUret(10, tohum);
+  const B = grupUret(10 + ayrim, tohum + 51);
+  const C = grupUret(10 + 2 * ayrim, tohum + 103);
+
+  grafik.data.datasets[0].data = A.map(x => ({ x, y: 1 }));
+  grafik.data.datasets[1].data = B.map(x => ({ x, y: 2 }));
+  grafik.data.datasets[2].data = C.map(x => ({ x, y: 3 }));
+  grafik.update();
+
+  const r = Ist.kruskalWallis([A, B, C]);
+  document.getElementById("cH").textContent = Ist.bicim(r.H, 2);
+  document.getElementById("cP").textContent = Ist.pYazi(r.p);
+  document.getElementById("cKarar").textContent = r.p < 0.05 ? "En az bir il farklı ✓" : "Ayırt edilemiyor";
+}
+
+document.getElementById("ayrim").addEventListener("input", guncelle);
+document.getElementById("yeni").addEventListener("click", () => { tohum = (tohum * 6151 + 7) % 2147483647; guncelle(); });
+window.addEventListener("load", kur);
+</script>
+
+</body>
+</html>

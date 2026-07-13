@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karar Ağacı — Biyoistatistik Atlası</title>
+<meta name="description" content="Hangi istatistik testi kullanmalıyım? Sorulara cevap ver, doğru teste ulaş. İnteraktif test seçim ağacı.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="karar-agaci.html" class="aktif">Karar Ağacı</a>
+      <a href="tanimlayici.html">Tanımlayıcı</a>
+      <a href="korelasyon.html">Korelasyon</a>
+      <a href="regresyon.html">Regresyon</a>
+      <a href="ki-kare.html">Ki-Kare</a>
+      <a href="t-testi.html">t-Testi</a>
+      <a href="anova.html">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <span class="etiket">Yol haritası · İnteraktif</span>
+      <h1>Hangi testi kullanmalıyım?</h1>
+      <p class="ozet">Bir araştırmacının en sık sorduğu soru budur. Cevap üç–dört basit soruya bağlıdır: <strong>Verin sayı mı kategori mi? Kaç grup var? Gruplar bağımlı mı?</strong> Aşağıdaki sihirbaza cevap ver, seni doğru teste ve onun sayfasına götürsün.</p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">Harita</span>
+      <p class="kisi">13 test, tek ağaç</p>
+      <p>Bu ağaç, bu atlastaki tüm testleri tek bir mantık akışında birleştirir. Kırmızı kutular tıklanabilir.</p>
+    </aside>
+  </header>
+
+  <!-- SİHİRBAZ -->
+  <section class="sihirbaz" id="sihirbaz">
+    <div id="soruAlan">
+      <p class="adim-bilgi" id="adimBilgi">Adım 1 / 3</p>
+      <p class="soru" id="soruMetin">Verin türü ne?</p>
+      <div class="secenekler" id="secenekAlan"></div>
+    </div>
+    <button class="geri" id="geriDugme" style="display:none">← Baştan başla</button>
+  </section>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">İki anahtar kavram</h2>
+    <p><strong>Bağımlı mı, bağımsız mı?</strong> Aynı kişileri iki kez ölçüyorsan (tedaviden <em>önce</em> ve <em>sonra</em>) veriler <strong>bağımlıdır (eşleştirilmiş)</strong>. Farklı kişilerden iki ayrı grup topluyorsan (ilaç grubu vs. plasebo grubu) veriler <strong>bağımsızdır</strong>.</p>
+    <p style="margin-bottom:0"><strong>Parametrik mi, değil mi?</strong> Veri düzgün (normal) dağılıyor ve yeterince büyükse <strong>parametrik</strong> testler (t, ANOVA) kullanılır. Veri çarpıksa, sıralı (ordinal) ya da örneklem çok küçükse, onların <strong>sıra temelli ikizleri</strong> (Mann-Whitney, Kruskal-Wallis...) devreye girer. Ağaçta her parametrik testin bir ikizi vardır.</p>
+  </section>
+
+  <!-- GÖRSEL AĞAÇ -->
+  <h2>Tüm ağaç — tıklanabilir harita</h2>
+  <p class="ozet">Kırmızı kutulara tıklayarak doğrudan o testin sayfasına gidebilirsin. (Ağaç geniş; parmağınla kaydırabilirsin.)</p>
+
+  <div class="agac-sar">
+    <div class="agac">
+      <ul>
+        <li>
+          <span class="agac-kutu dal">Veri Çeşitleri</span>
+          <ul>
+            <!-- SAYISAL -->
+            <li>
+              <span class="agac-kutu dal">Sayısal</span>
+              <ul>
+                <li>
+                  <span class="agac-kutu">2 Grup</span>
+                  <ul>
+                    <li>
+                      <span class="agac-kutu">Bağımlı</span>
+                      <ul><li><a class="agac-kutu yaprak" href="paired-t.html">Paired t · Wilcoxon</a></li></ul>
+                    </li>
+                    <li>
+                      <span class="agac-kutu">Bağımsız</span>
+                      <ul><li><a class="agac-kutu yaprak" href="t-testi.html">Student t · Mann-Whitney</a></li></ul>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <span class="agac-kutu">&gt;2 Grup</span>
+                  <ul>
+                    <li>
+                      <span class="agac-kutu">Bağımlı</span>
+                      <ul><li><a class="agac-kutu yaprak" href="repeated-anova.html">Repeated ANOVA · Friedman</a></li></ul>
+                    </li>
+                    <li>
+                      <span class="agac-kutu">Bağımsız</span>
+                      <ul><li><a class="agac-kutu yaprak" href="anova.html">One-way ANOVA · Kruskal-Wallis</a></li></ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <!-- KATEGORİK -->
+            <li>
+              <span class="agac-kutu dal">Kategorik</span>
+              <ul>
+                <li>
+                  <span class="agac-kutu">2 Kategori</span>
+                  <ul>
+                    <li>
+                      <span class="agac-kutu">2 Grup</span>
+                      <ul>
+                        <li>
+                          <span class="agac-kutu">Bağımlı</span>
+                          <ul><li><a class="agac-kutu yaprak" href="mcnemar.html">McNemar</a></li></ul>
+                        </li>
+                        <li>
+                          <span class="agac-kutu">Bağımsız</span>
+                          <ul><li><a class="agac-kutu yaprak" href="ki-kare.html">Ki-kare · Fisher</a></li></ul>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <span class="agac-kutu">&gt;2 Grup</span>
+                      <ul>
+                        <li>
+                          <span class="agac-kutu">Bağımlı</span>
+                          <ul><li><a class="agac-kutu yaprak" href="cochran-q.html">Cochran Q</a></li></ul>
+                        </li>
+                        <li>
+                          <span class="agac-kutu">Bağımsız</span>
+                          <ul><li><a class="agac-kutu yaprak" href="ki-kare.html">Ki-kare</a></li></ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <span class="agac-kutu">&gt;2 Kategori</span>
+                  <ul>
+                    <li>
+                      <span class="agac-kutu">Bağımlı</span>
+                      <ul><li><a class="agac-kutu yaprak" href="marginal-homogenlik.html">Marginal Homogeneity</a></li></ul>
+                    </li>
+                    <li>
+                      <span class="agac-kutu">Bağımsız</span>
+                      <ul><li><a class="agac-kutu yaprak" href="ki-kare.html">Ki-kare</a></li></ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="kart vurgu-leylak">
+    <h2 style="margin-top:0">Testlerin tam listesi</h2>
+    <p>Her testin kendi sayfası var — hikâyesi, sağlıktan örneği ve interaktif deney masasıyla:</p>
+    <table class="veri" style="text-align:left">
+      <thead><tr><th>Test</th><th>Ne zaman?</th></tr></thead>
+      <tbody>
+        <tr><td><a href="paired-t.html">Paired t test</a></td><td>Sayısal · aynı kişilerde önce/sonra</td></tr>
+        <tr><td><a href="wilcoxon.html">Wilcoxon işaretli sıralar</a></td><td>Paired t'nin sıra temelli ikizi</td></tr>
+        <tr><td><a href="t-testi.html">Student t test</a></td><td>Sayısal · iki bağımsız grup</td></tr>
+        <tr><td><a href="mann-whitney.html">Mann-Whitney U</a></td><td>Student t'nin sıra temelli ikizi</td></tr>
+        <tr><td><a href="repeated-anova.html">Repeated Measures ANOVA</a></td><td>Sayısal · aynı kişilerde &gt;2 ölçüm</td></tr>
+        <tr><td><a href="friedman.html">Friedman</a></td><td>Repeated ANOVA'nın sıra temelli ikizi</td></tr>
+        <tr><td><a href="anova.html">One-way ANOVA</a></td><td>Sayısal · &gt;2 bağımsız grup</td></tr>
+        <tr><td><a href="kruskal-wallis.html">Kruskal-Wallis</a></td><td>One-way ANOVA'nın sıra temelli ikizi</td></tr>
+        <tr><td><a href="mcnemar.html">McNemar</a></td><td>Kategorik · aynı kişilerde önce/sonra (2×2)</td></tr>
+        <tr><td><a href="ki-kare.html">Ki-kare</a></td><td>Kategorik · bağımsız gruplar</td></tr>
+        <tr><td><a href="fisher.html">Fisher kesin testi</a></td><td>Ki-kare'nin küçük örneklem ikizi</td></tr>
+        <tr><td><a href="cochran-q.html">Cochran Q</a></td><td>Kategorik · aynı kişilerde &gt;2 ikili koşul</td></tr>
+        <tr><td><a href="marginal-homogenlik.html">Marginal Homogeneity</a></td><td>Kategorik · aynı kişilerde &gt;2 kategori kayması</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <nav class="sayfa-gezinme">
+    <a href="index.html">← Ana Sayfa</a>
+    <a href="paired-t.html">İlk testi keşfet →</a>
+  </nav>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Test seçimi öğretim amaçlı sadeleştirilmiştir; gerçek analizlerde varsayım kontrolleri gerekir.
+</footer>
+
+<script>
+// Karar ağacı sihirbazı — durum makinesi
+const agac = {
+  baslangic: {
+    soru: "Verin türü ne?",
+    secenekler: [
+      { yazi: "Sayısal", alt: "Ölçülen sayılar: tansiyon, ateş, kilo, süre...", git: "sayisalGrup" },
+      { yazi: "Kategorik", alt: "Etiketler: hasta/sağlıklı, evet/hayır, evre 1-2-3...", git: "katKategori" }
+    ]
+  },
+  sayisalGrup: {
+    soru: "Kaç grup ya da ölçüm karşılaştırıyorsun?",
+    secenekler: [
+      { yazi: "2 grup / ölçüm", alt: "İki durumu kıyaslıyorum", git: "sayisal2Bag" },
+      { yazi: "3 veya daha fazla", alt: "İkiden çok durum var", git: "sayisalCokBag" }
+    ]
+  },
+  sayisal2Bag: {
+    soru: "Gruplar bağımlı mı bağımsız mı?",
+    secenekler: [
+      { yazi: "Bağımlı (eşleştirilmiş)", alt: "Aynı kişiler önce ve sonra", sonuc: "paired" },
+      { yazi: "Bağımsız", alt: "Farklı kişilerden iki ayrı grup", sonuc: "student" }
+    ]
+  },
+  sayisalCokBag: {
+    soru: "Gruplar bağımlı mı bağımsız mı?",
+    secenekler: [
+      { yazi: "Bağımlı (tekrarlı)", alt: "Aynı kişiler birçok kez ölçüldü", sonuc: "rmanova" },
+      { yazi: "Bağımsız", alt: "Birden çok ayrı grup", sonuc: "anova" }
+    ]
+  },
+  katKategori: {
+    soru: "Kaç kategori (seçenek) var?",
+    secenekler: [
+      { yazi: "2 kategori", alt: "İkili sonuç: var/yok, evet/hayır", git: "kat2Grup" },
+      { yazi: "3 veya daha fazla", alt: "Çok seçenekli: evre 1/2/3...", git: "katCokKat" }
+    ]
+  },
+  kat2Grup: {
+    soru: "Kaç grup karşılaştırıyorsun?",
+    secenekler: [
+      { yazi: "2 grup", alt: "İki durumu kıyaslıyorum", git: "kat2Bag" },
+      { yazi: "3 veya daha fazla", alt: "İkiden çok koşul", git: "katCokBag" }
+    ]
+  },
+  kat2Bag: {
+    soru: "Gruplar bağımlı mı bağımsız mı?",
+    secenekler: [
+      { yazi: "Bağımlı", alt: "Aynı kişiler önce/sonra", sonuc: "mcnemar" },
+      { yazi: "Bağımsız", alt: "Farklı kişiler", sonuc: "kikare2" }
+    ]
+  },
+  katCokBag: {
+    soru: "Koşullar bağımlı mı bağımsız mı?",
+    secenekler: [
+      { yazi: "Bağımlı", alt: "Aynı kişilerde birçok ikili koşul", sonuc: "cochran" },
+      { yazi: "Bağımsız", alt: "Farklı gruplar", sonuc: "kikareCok" }
+    ]
+  },
+  katCokKat: {
+    soru: "Ölçümler bağımlı mı bağımsız mı?",
+    secenekler: [
+      { yazi: "Bağımlı", alt: "Aynı kişilerde kategori değişimi", sonuc: "marginal" },
+      { yazi: "Bağımsız", alt: "Farklı gruplar", sonuc: "kikareCokKat" }
+    ]
+  }
+};
+
+const sonuclar = {
+  paired:    { ad: "Paired t test", ikiz: "Veri normal değilse ikizi: Wilcoxon işaretli sıralar testi.", link: "paired-t.html" },
+  student:   { ad: "Student t test", ikiz: "Veri normal değilse ikizi: Mann-Whitney U testi.", link: "t-testi.html" },
+  rmanova:   { ad: "Repeated Measures ANOVA", ikiz: "Veri normal değilse ikizi: Friedman testi.", link: "repeated-anova.html" },
+  anova:     { ad: "One-way ANOVA", ikiz: "Veri normal değilse ikizi: Kruskal-Wallis testi.", link: "anova.html" },
+  mcnemar:   { ad: "McNemar testi", ikiz: "Aynı kişilerde ikili sonucun önce/sonra değişimi.", link: "mcnemar.html" },
+  kikare2:   { ad: "Ki-kare testi", ikiz: "Örneklem küçükse (beklenen &lt;5) ikizi: Fisher kesin testi.", link: "ki-kare.html" },
+  cochran:   { ad: "Cochran Q testi", ikiz: "McNemar'ın 3+ ikili koşula genişlemiş hali.", link: "cochran-q.html" },
+  kikareCok: { ad: "Ki-kare testi", ikiz: "Birden çok grup, ikili sonuç.", link: "ki-kare.html" },
+  marginal:  { ad: "Marginal Homogeneity (Stuart-Maxwell)", ikiz: "Aynı kişilerde çok kategorili dağılımın kayması.", link: "marginal-homogenlik.html" },
+  kikareCokKat: { ad: "Ki-kare testi", ikiz: "Bağımsız gruplar, çok kategorili sonuç.", link: "ki-kare.html" }
+};
+
+let yol = ["baslangic"];
+
+function goster() {
+  const dugum = agac[yol[yol.length - 1]];
+  const alan = document.getElementById("secenekAlan");
+  document.getElementById("adimBilgi").textContent = "Adım " + yol.length;
+  document.getElementById("soruMetin").innerHTML = dugum.soru;
+  alan.innerHTML = "";
+  dugum.secenekler.forEach(s => {
+    const b = document.createElement("button");
+    b.innerHTML = s.yazi + "<small>" + s.alt + "</small>";
+    b.onclick = () => {
+      if (s.sonuc) sonucGoster(s.sonuc);
+      else { yol.push(s.git); goster(); }
+    };
+    alan.appendChild(b);
+  });
+  document.getElementById("geriDugme").style.display = yol.length > 1 ? "block" : "none";
+}
+
+function sonucGoster(anahtar) {
+  const s = sonuclar[anahtar];
+  document.getElementById("soruAlan").innerHTML =
+    '<div class="sihirbaz-sonuc">' +
+    '<div class="etiket-kucuk">Önerilen test</div>' +
+    '<div class="test-adi">' + s.ad + '</div>' +
+    '<div class="ikiz-not">' + s.ikiz + '</div>' +
+    '<a href="' + s.link + '"><button class="dugme">Bu testin sayfasına git →</button></a>' +
+    '</div>';
+  document.getElementById("geriDugme").style.display = "block";
+}
+
+document.getElementById("geriDugme").onclick = () => {
+  yol = ["baslangic"];
+  document.getElementById("soruAlan").innerHTML =
+    '<p class="adim-bilgi" id="adimBilgi"></p><p class="soru" id="soruMetin"></p><div class="secenekler" id="secenekAlan"></div>';
+  goster();
+};
+
+goster();
+</script>
+
+</body>
+</html>

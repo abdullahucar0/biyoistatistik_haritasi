@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tekrarlı Ölçümler ANOVA — Biyoistatistik Atlası</title>
+<meta name="description" content="Aynı hastaları birçok kez ölçmek. Repeated Measures ANOVA'yı profil grafiğiyle interaktif öğren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="karar-agaci.html">Karar Ağacı</a>
+      <a href="tanimlayici.html">Tanımlayıcı</a>
+      <a href="korelasyon.html">Korelasyon</a>
+      <a href="regresyon.html">Regresyon</a>
+      <a href="ki-kare.html">Ki-Kare</a>
+      <a href="t-testi.html">t-Testi</a>
+      <a href="anova.html">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <div class="karar-yol">
+        <a href="karar-agaci.html" class="parca">Sayısal</a><span class="ok">→</span>
+        <span class="parca">&gt;2 Grup</span><span class="ok">→</span>
+        <span class="parca">Bağımlı</span><span class="ok">→</span>
+        <span class="parca son">Repeated ANOVA</span>
+      </div>
+      <h1>Tekrarlı Ölçümler ANOVA</h1>
+      <p class="ozet">Bir fizik tedavi programında <strong>aynı hastaların</strong> ağrısını 0., 4. ve 8. haftada ölçtün. Zaman içinde gerçek bir iyileşme var mı? Paired t'nin ikiden çok ölçüme genişlemiş hali.</p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">1925</span>
+      <p class="kisi">Ronald A. Fisher</p>
+      <p>ANOVA'nın "aynı denek defalarca ölçülür" biçimi. Fisher'ın varyans ayrıştırma fikri burada bir adım öteye geçer: <strong>hastalar arası farkı da ayırıp</strong> kenara koyar, böylece zaman etkisini net görürsün.</p>
+    </aside>
+  </header>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">Neden sıradan ANOVA yetmez?</h2>
+    <p>
+      Sıradan (one-way) ANOVA grupların <strong>farklı kişilerden</strong> oluştuğunu varsayar. Ama burada üç "grup"
+      aslında aynı hastaların üç farklı zamanı. Tekrarlı ölçümler ANOVA bunu bilir: her hastanın kendine özgü seviyesini
+      (kimi genelde daha ağrılı, kimi daha az) <strong>ayrı bir kaynak</strong> olarak modelden çıkarır. Geriye sadece
+      "zaman gerçekten değiştirdi mi?" sorusu kalır — çok daha güçlü bir test.
+    </p>
+  </section>
+
+  <div class="deney-masasi">
+    <h3>🔬 Deney Masası — "Herkesin çizgisi aşağı iniyor mu?"</h3>
+    <p>Her çizgi bir hastanın 3 haftadaki ağrısı. <strong>Zaman etkisini</strong> (haftalar arası düşüş) ve
+      <strong>hastalar arası ayrışmayı</strong> değiştir. Çizgiler paralel biçimde inerken zaman etkisi net görünür.</p>
+
+    <div class="kaydirici-grubu">
+      <label for="zaman">Haftalar arası ağrı düşüşü <output id="zamanDeger">2</output></label>
+      <input type="range" id="zaman" min="0" max="4" step="0.2" value="2">
+    </div>
+    <div class="kaydirici-grubu">
+      <label for="kisiler">Hastalar arası fark (kim genelde ağrılı) <output id="kisilerDeger">2</output></label>
+      <input type="range" id="kisiler" min="0" max="5" step="0.5" value="2">
+    </div>
+
+    <div class="grafik-kutu"><canvas id="rmGrafik"></canvas></div>
+
+    <div class="sonuc-panosu">
+      <div class="sonuc-kutusu"><div class="deger" id="cF">–</div><div class="ad">F değeri</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cP">–</div><div class="ad">p değeri</div></div>
+      <div class="sonuc-kutusu karar"><div class="deger" id="cKarar">–</div><div class="ad">Karar</div></div>
+    </div>
+  </div>
+
+  <div class="ikiz-kart">
+    <div class="rozet">👯</div>
+    <div class="ic">
+      <h3>İkizi: Friedman testi</h3>
+      <p>Ağrı puanları normal dağılmıyorsa ya da sıralı (ordinal) bir ölçekse, sıra temelli ikizini kullan.</p>
+    </div>
+    <a class="dugme-ikiz" href="friedman.html">Friedman →</a>
+  </div>
+
+  <nav class="sayfa-gezinme">
+    <a href="mann-whitney.html">← Mann-Whitney</a>
+    <a href="friedman.html">Sıradaki: Friedman →</a>
+  </nav>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Grafiklerdeki veriler öğretim için üretilmiş örnek verilerdir.
+</footer>
+
+<script src="js/ortak.js"></script>
+<script>
+const nHasta = 8;
+let grafik;
+
+function kur() {
+  const ctx = document.getElementById("rmGrafik");
+  grafik = new Chart(ctx, {
+    type: "line",
+    data: { labels: ["0. Hafta", "4. Hafta", "8. Hafta"], datasets: [] },
+    options: {
+      scales: {
+        x: { grid: { display: false } },
+        y: { title: { display: true, text: "Ağrı puanı (0–10)" }, min: 0, max: 10 }
+      },
+      plugins: { legend: { display: false } },
+      elements: { point: { radius: 3 } }
+    }
+  });
+  guncelle();
+}
+
+function guncelle() {
+  const zaman = +document.getElementById("zaman").value;
+  const kisiFark = +document.getElementById("kisiler").value;
+  document.getElementById("zamanDeger").textContent = Ist.bicim(zaman, 1);
+  document.getElementById("kisilerDeger").textContent = Ist.bicim(kisiFark, 1);
+
+  const uret = Ist.rastgele(77);
+  const matris = [];
+  const setler = [];
+  for (let i = 0; i < nHasta; i++) {
+    const kisiTaban = 7 + kisiFark * Ist.normalSayi(uret); // hastanın genel ağrı seviyesi
+    const satir = [0, 1, 2].map(h => {
+      const deger = kisiTaban - zaman * h + 0.6 * Ist.normalSayi(uret);
+      return Math.max(0, Math.min(10, deger));
+    });
+    matris.push(satir);
+    setler.push({ data: satir, borderColor: Renk.leylak, backgroundColor: Renk.leylak, borderWidth: 1.5, tension: 0.2 });
+  }
+  grafik.data.datasets = setler;
+  grafik.update();
+
+  const r = Ist.tekrarliAnova(matris);
+  document.getElementById("cF").textContent = Ist.bicim(r.F, 2);
+  document.getElementById("cP").textContent = Ist.pYazi(r.p);
+  document.getElementById("cKarar").textContent = r.p < 0.05 ? "Zaman etkisi gerçek ✓" : "İyileşme belirsiz";
+}
+
+["zaman", "kisiler"].forEach(id => document.getElementById(id).addEventListener("input", guncelle));
+window.addEventListener("load", kur);
+</script>
+
+</body>
+</html>

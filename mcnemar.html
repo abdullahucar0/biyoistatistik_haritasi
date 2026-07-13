@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>McNemar Testi — Biyoistatistik Atlası</title>
+<meta name="description" content="Aynı kişilerde önce/sonra ikili sonucun değişimi. McNemar testini interaktif olarak öğren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="karar-agaci.html">Karar Ağacı</a>
+      <a href="tanimlayici.html">Tanımlayıcı</a>
+      <a href="korelasyon.html">Korelasyon</a>
+      <a href="regresyon.html">Regresyon</a>
+      <a href="ki-kare.html">Ki-Kare</a>
+      <a href="t-testi.html">t-Testi</a>
+      <a href="anova.html">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <div class="karar-yol">
+        <a href="karar-agaci.html" class="parca">Kategorik</a><span class="ok">→</span>
+        <span class="parca">2 Kategori</span><span class="ok">→</span>
+        <span class="parca">2 Grup · Bağımlı</span><span class="ok">→</span>
+        <span class="parca son">McNemar</span>
+      </div>
+      <h1>McNemar Testi</h1>
+      <p class="ozet">Bir sigara bırakma programına <strong>aynı 100 kişi</strong> katıldı. Program öncesi ve sonrası "sigara içiyor mu?" diye sordun. Program işe yaradı mı? İşin sırrı: sadece <strong>fikir değiştirenlere</strong> bakmak.</p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">1947</span>
+      <p class="kisi">Quinn McNemar</p>
+      <p>Psikolog ve istatistikçi. Aynı kişilerde önce/sonra ikili sonucu karşılaştırmak için ki-kare'nin özel bir biçimini geliştirdi. Anahtar fikri: <strong>hiç değişmeyenler bilgi taşımaz.</strong></p>
+    </aside>
+  </header>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">Neden sıradan ki-kare olmaz?</h2>
+    <p>
+      Sıradan ki-kare, iki <strong>bağımsız</strong> grup içindir. Ama burada iki sütun aynı kişilerin iki halidir
+      (önce ve sonra). McNemar'ın parlak gözlemi şu: program öncesi de sonrası da sigara içen biri, ya da ikisinde de
+      içmeyen biri sana programın etkisi hakkında <strong>hiçbir şey söylemez</strong>. Asıl bilgi <strong>fikir
+      değiştirenlerde</strong>: "bıraktı" olanlarla "başladı" olanlar. Test yalnızca bu iki hücreyi karşılaştırır.
+    </p>
+  </section>
+
+  <div class="deney-masasi">
+    <h3>🔬 Deney Masası — "Sadece değişenler konuşur"</h3>
+    <p>İki kaydırıcı: kaç kişi <strong>sigarayı bıraktı</strong> ve kaç kişi <strong>yeni başladı</strong>. (Hiç
+      değişmeyenler griyle gösterilir; teste hiç girmezler.) İki yön arasındaki fark büyüdükçe program etkisi anlamlı çıkar.</p>
+
+    <div class="kaydirici-grubu">
+      <label for="birakti">Programdan sonra BIRAKANLAR <output id="biraktiDeger">22</output></label>
+      <input type="range" id="birakti" min="0" max="40" step="1" value="22">
+    </div>
+    <div class="kaydirici-grubu">
+      <label for="basladi">Programdan sonra YENİ BAŞLAYANLAR <output id="basladiDeger">6</output></label>
+      <input type="range" id="basladi" min="0" max="40" step="1" value="6">
+    </div>
+
+    <div class="grafik-kutu"><canvas id="mcnemarGrafik"></canvas></div>
+
+    <table class="veri">
+      <thead><tr><th></th><th>Sonra: İçiyor</th><th>Sonra: İçmiyor</th></tr></thead>
+      <tbody>
+        <tr><th>Önce: İçiyor</th><td id="hucreA" style="color:#9AA">değişmedi</td><td id="hucreB" style="background:var(--cam-acik);font-weight:800">bıraktı</td></tr>
+        <tr><th>Önce: İçmiyor</th><td id="hucreC" style="background:var(--mercan-acik);font-weight:800">başladı</td><td id="hucreD" style="color:#9AA">değişmedi</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sonuc-panosu">
+      <div class="sonuc-kutusu"><div class="deger" id="cChi">–</div><div class="ad">χ² (McNemar)</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cP">–</div><div class="ad">p değeri</div></div>
+      <div class="sonuc-kutusu karar"><div class="deger" id="cKarar">–</div><div class="ad">Karar</div></div>
+    </div>
+  </div>
+
+  <div class="ikiz-kart">
+    <div class="rozet">🔗</div>
+    <div class="ic">
+      <h3>Bağımsız karşılığı: Ki-kare testi</h3>
+      <p>Eğer önce/sonra aynı kişiler değil de iki ayrı grup olsaydı (ör. iki farklı köy), McNemar yerine sıradan ki-kare kullanırdın.</p>
+    </div>
+    <a class="dugme-ikiz" href="ki-kare.html">Ki-kare →</a>
+  </div>
+
+  <nav class="sayfa-gezinme">
+    <a href="kruskal-wallis.html">← Kruskal-Wallis</a>
+    <a href="fisher.html">Sıradaki: Fisher →</a>
+  </nav>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Grafiklerdeki veriler öğretim için üretilmiş örnek verilerdir.
+</footer>
+
+<script src="js/ortak.js"></script>
+<script>
+const toplam = 100;
+let grafik;
+
+function kur() {
+  const ctx = document.getElementById("mcnemarGrafik");
+  grafik = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Bıraktı", "Yeni başladı"],
+      datasets: [{ label: "Kişi sayısı", data: [], backgroundColor: [Renk.cam, Renk.mercan] }]
+    },
+    options: {
+      scales: {
+        x: { grid: { display: false }, title: { display: true, text: "Sadece fikir değiştirenler teste girer" } },
+        y: { beginAtZero: true, title: { display: true, text: "Kişi sayısı" } }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+  guncelle();
+}
+
+function guncelle() {
+  const b = +document.getElementById("birakti").value;  // bıraktı (uyumsuz 1)
+  const c = +document.getElementById("basladi").value;  // başladı (uyumsuz 2)
+  document.getElementById("biraktiDeger").textContent = b;
+  document.getElementById("basladiDeger").textContent = c;
+
+  const degismeyen = Math.max(0, toplam - b - c);
+  const a = Math.round(degismeyen * 0.6), d = degismeyen - Math.round(degismeyen * 0.6);
+  document.getElementById("hucreA").textContent = a;
+  document.getElementById("hucreB").textContent = b;
+  document.getElementById("hucreC").textContent = c;
+  document.getElementById("hucreD").textContent = d;
+
+  grafik.data.datasets[0].data = [b, c];
+  grafik.update();
+
+  const r = Ist.mcNemar(b, c);
+  document.getElementById("cChi").textContent = Ist.bicim(r.chi, 2);
+  document.getElementById("cP").textContent = Ist.pYazi(r.p);
+  document.getElementById("cKarar").textContent = r.p < 0.05 ? "Program etkili ✓" : "Değişim şans olabilir";
+}
+
+["birakti", "basladi"].forEach(id => document.getElementById(id).addEventListener("input", guncelle));
+window.addEventListener("load", kur);
+</script>
+
+</body>
+</html>

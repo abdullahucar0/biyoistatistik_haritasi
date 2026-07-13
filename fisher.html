@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fisher Kesin Testi — Biyoistatistik Atlası</title>
+<meta name="description" content="Küçük örneklemlerde 2x2 tablosunun kesin analizi. Fisher kesin testini ki-kare ile karşılaştırarak interaktif öğren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="karar-agaci.html">Karar Ağacı</a>
+      <a href="tanimlayici.html">Tanımlayıcı</a>
+      <a href="korelasyon.html">Korelasyon</a>
+      <a href="regresyon.html">Regresyon</a>
+      <a href="ki-kare.html">Ki-Kare</a>
+      <a href="t-testi.html">t-Testi</a>
+      <a href="anova.html">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <div class="karar-yol">
+        <a href="karar-agaci.html" class="parca">Kategorik</a><span class="ok">→</span>
+        <span class="parca">2 Kategori</span><span class="ok">→</span>
+        <span class="parca">Bağımsız · küçük örneklem</span><span class="ok">→</span>
+        <span class="parca son">Fisher</span>
+      </div>
+      <h1>Fisher Kesin Testi</h1>
+      <p class="ozet">Nadir bir hastalıkta yeni bir tedaviyi <strong>sadece 16 hastada</strong> denedin. Ki-kare böyle küçük sayılarda yanıltır. Fisher kesin testi, olasılığı bir <strong>yaklaşımla değil, tam olarak</strong> hesaplar.</p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">1935</span>
+      <p class="kisi">Ronald A. Fisher</p>
+      <p>Meşhur "çay tadan hanım" deneyinden doğdu: bir kadın, çaya sütün mü yoksa süte çayın mı önce konduğunu tadarak ayırt edebildiğini iddia etti. Fisher, küçük bir deneyin sonucunun şans olma olasılığını <strong>tam olarak</strong> hesaplamanın yolunu gösterdi.</p>
+    </aside>
+  </header>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">Neden küçük örneklemde ki-kare yanıltır?</h2>
+    <p>
+      Ki-kare, arka planda bir <strong>yaklaşım</strong> (çan eğrisi) kullanır. Bu yaklaşım örneklem büyükken çok iyidir
+      ama hücrelerdeki sayılar küçüldükçe (kabaca beklenen değer 5'in altına inince) bozulur ve p değerini olduğundan
+      küçük gösterebilir — yani var olmayan bir etkiyi "anlamlı" sanabilirsin. Fisher bunun yerine, aynı satır ve sütun
+      toplamlarıyla oluşabilecek <strong>tüm olası tabloları</strong> tek tek sayar ve gerçek olasılığı doğrudan bulur.
+    </p>
+  </section>
+
+  <div class="deney-masasi">
+    <h3>🔬 Deney Masası — "Küçük sayılarda iki test ayrışır"</h3>
+    <p>2×2 tablodaki dört hücreyi değiştir. Toplam örneklem küçükken Fisher'ın kesin p'si ile ki-kare'nin yaklaşık p'sinin
+      <strong>nasıl ayrıştığına</strong> dikkat et. Sayılar büyüdükçe ikisi birbirine yaklaşır.</p>
+
+    <div class="tablo-kaydirici">
+      <div class="kaydirici-grubu">
+        <label for="a">Tedavi + / İyileşti <output id="aDeger">6</output></label>
+        <input type="range" id="a" min="0" max="15" step="1" value="6">
+      </div>
+      <div class="kaydirici-grubu">
+        <label for="b">Tedavi + / İyileşmedi <output id="bDeger">2</output></label>
+        <input type="range" id="b" min="0" max="15" step="1" value="2">
+      </div>
+      <div class="kaydirici-grubu">
+        <label for="c">Plasebo / İyileşti <output id="cDeger">1</output></label>
+        <input type="range" id="c" min="0" max="15" step="1" value="1">
+      </div>
+      <div class="kaydirici-grubu">
+        <label for="d">Plasebo / İyileşmedi <output id="dDeger">7</output></label>
+        <input type="range" id="d" min="0" max="15" step="1" value="7">
+      </div>
+    </div>
+
+    <table class="veri">
+      <thead><tr><th></th><th>İyileşti</th><th>İyileşmedi</th></tr></thead>
+      <tbody>
+        <tr><th>Tedavi</th><td id="tA" style="background:var(--cam-acik);font-weight:800">6</td><td id="tB">2</td></tr>
+        <tr><th>Plasebo</th><td id="tC">1</td><td id="tD" style="background:var(--mercan-acik);font-weight:800">7</td></tr>
+      </tbody>
+    </table>
+    <p style="text-align:center;font-weight:700" id="toplamN">Toplam: 16 hasta</p>
+
+    <div class="sonuc-panosu">
+      <div class="sonuc-kutusu"><div class="deger" id="cFisher">–</div><div class="ad">Fisher (kesin) p</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cKikare">–</div><div class="ad">Ki-kare (yaklaşık) p</div></div>
+      <div class="sonuc-kutusu karar"><div class="deger" id="cKarar">–</div><div class="ad">Fark ne?</div></div>
+    </div>
+  </div>
+
+  <div class="ikiz-kart">
+    <div class="rozet">🔗</div>
+    <div class="ic">
+      <h3>Büyük örneklem karşılığı: Ki-kare testi</h3>
+      <p>Hücrelerdeki sayılar yeterince büyükse (beklenen ≥5), ki-kare pratik ve hızlıdır; Fisher ise her boyutta güvenlidir ama küçük örneklemde vazgeçilmezdir.</p>
+    </div>
+    <a class="dugme-ikiz" href="ki-kare.html">Ki-kare →</a>
+  </div>
+
+  <nav class="sayfa-gezinme">
+    <a href="mcnemar.html">← McNemar</a>
+    <a href="cochran-q.html">Sıradaki: Cochran Q →</a>
+  </nav>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Grafiklerdeki veriler öğretim için üretilmiş örnek verilerdir.
+</footer>
+
+<script src="js/ortak.js"></script>
+<script>
+function guncelle() {
+  const a = +document.getElementById("a").value;
+  const b = +document.getElementById("b").value;
+  const c = +document.getElementById("c").value;
+  const d = +document.getElementById("d").value;
+  ["a", "b", "c", "d"].forEach(id => document.getElementById(id + "Deger").textContent = document.getElementById(id).value);
+  document.getElementById("tA").textContent = a;
+  document.getElementById("tB").textContent = b;
+  document.getElementById("tC").textContent = c;
+  document.getElementById("tD").textContent = d;
+  document.getElementById("toplamN").textContent = "Toplam: " + (a + b + c + d) + " hasta";
+
+  if (a + b + c + d === 0 || (a + b) === 0 || (c + d) === 0 || (a + c) === 0 || (b + d) === 0) {
+    document.getElementById("cFisher").textContent = "–";
+    document.getElementById("cKikare").textContent = "–";
+    document.getElementById("cKarar").textContent = "Geçersiz tablo";
+    return;
+  }
+
+  const f = Ist.fisherKesin(a, b, c, d);
+  const k = Ist.kiKare2x2(a, b, c, d);
+  document.getElementById("cFisher").textContent = Ist.pYazi(f.p);
+  document.getElementById("cKikare").textContent = Ist.pYazi(k.p);
+
+  const n = a + b + c + d;
+  const fark = Math.abs(f.p - k.p);
+  const karar = document.getElementById("cKarar");
+  if (n < 20 && fark > 0.03) karar.textContent = "Küçük örneklem: ki-kare kayıyor!";
+  else if (fark < 0.02) karar.textContent = "İkisi de uyumlu";
+  else karar.textContent = "Fisher'a güven";
+}
+
+["a", "b", "c", "d"].forEach(id => document.getElementById(id).addEventListener("input", guncelle));
+window.addEventListener("load", guncelle);
+</script>
+
+</body>
+</html>

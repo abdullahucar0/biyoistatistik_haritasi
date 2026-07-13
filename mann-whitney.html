@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mann-Whitney U Testi — Biyoistatistik Atlası</title>
+<meta name="description" content="İki bağımsız grubu sıralayarak karşılaştırmak. Student t'nin sıra temelli ikizi Mann-Whitney U'yu interaktif öğren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="karar-agaci.html">Karar Ağacı</a>
+      <a href="tanimlayici.html">Tanımlayıcı</a>
+      <a href="korelasyon.html">Korelasyon</a>
+      <a href="regresyon.html">Regresyon</a>
+      <a href="ki-kare.html">Ki-Kare</a>
+      <a href="t-testi.html">t-Testi</a>
+      <a href="anova.html">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <div class="karar-yol">
+        <a href="karar-agaci.html" class="parca">Sayısal</a><span class="ok">→</span>
+        <span class="parca">2 Grup</span><span class="ok">→</span>
+        <span class="parca">Bağımsız</span><span class="ok">→</span>
+        <span class="parca son">Mann-Whitney</span>
+      </div>
+      <h1>Mann-Whitney U Testi</h1>
+      <p class="ozet">İki ayrı hastanenin taburcu olma süreleri farklı mı? Student t'nin sıra temelli ikizi: iki bağımsız grubu, tüm değerleri <strong>birlikte sıralayıp</strong> karşılaştırır. Çarpık verilerde t'den güvenlidir.</p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">1947</span>
+      <p class="kisi">Henry Mann &<br>Donald Whitney</p>
+      <p>Wilcoxon'ın fikrini iki bağımsız gruba taşıdılar. Soru şuydu: "Bir gruptan rastgele seçtiğim kişi, diğer gruptan seçtiğimden büyük olma eğiliminde mi?" Cevap: <strong>U istatistiği.</strong></p>
+    </aside>
+  </header>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">Fikir: "kim kimi yeniyor?"</h2>
+    <p>
+      İki grubun tüm değerlerini tek bir sıraya dizersin (en küçük 1. sıra, en büyük son sıra). Eğer bir grubun üyeleri
+      hep üst sıralara, diğerininki hep alt sıralara düşüyorsa, iki grup gerçekten farklıdır. <strong>U</strong> aslında
+      "A grubundan bir kişi ile B grubundan bir kişi karşılaşsa, A kaç kez kazanır?" sorusunun cevabıdır. Ortalamalara
+      hiç bakmaz — sadece sıralara. Bu yüzden aşırı değerler ve çarpıklık onu bozamaz.
+    </p>
+  </section>
+
+  <div class="deney-masasi">
+    <h3>🔬 Deney Masası — "İki grubu üst üste kaydır"</h3>
+    <p>İki hastanenin taburcu süreleri (gün). İki grubun <strong>merkezini birbirinden uzaklaştır</strong>: dağılımlar
+      ayrıştıkça bir grup sıralamada öne geçer, U ve p buna göre değişir.</p>
+
+    <div class="kaydirici-grubu">
+      <label for="ayrim">İki hastane arasındaki merkez farkı (gün) <output id="ayrimDeger">3</output></label>
+      <input type="range" id="ayrim" min="0" max="12" step="1" value="3">
+    </div>
+    <button class="dugme ikincil" id="yeni">🎲 Yeni hasta grubu çek</button>
+
+    <div class="grafik-kutu"><canvas id="mwGrafik"></canvas></div>
+
+    <div class="sonuc-panosu">
+      <div class="sonuc-kutusu"><div class="deger" id="cU">–</div><div class="ad">U istatistiği</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cP">–</div><div class="ad">p değeri</div></div>
+      <div class="sonuc-kutusu karar"><div class="deger" id="cKarar">–</div><div class="ad">Karar</div></div>
+    </div>
+  </div>
+
+  <div class="ikiz-kart">
+    <div class="rozet">👯</div>
+    <div class="ic">
+      <h3>İkizi: Student t test</h3>
+      <p>İki grup da normal dağılıyorsa ve örneklem yeterliyse, ortalamaları doğrudan karşılaştıran t testi daha güçlüdür.</p>
+    </div>
+    <a class="dugme-ikiz" href="t-testi.html">Student t →</a>
+  </div>
+
+  <nav class="sayfa-gezinme">
+    <a href="wilcoxon.html">← Wilcoxon</a>
+    <a href="repeated-anova.html">Sıradaki: Repeated ANOVA →</a>
+  </nav>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Grafiklerdeki veriler öğretim için üretilmiş örnek verilerdir.
+</footer>
+
+<script src="js/ortak.js"></script>
+<script>
+let grafik, tohum = 5;
+
+function grupUret(merkez, tohumD) {
+  const uret = Ist.rastgele(tohumD);
+  const dizi = [];
+  for (let i = 0; i < 12; i++) dizi.push(Math.max(1, merkez + 2.5 * Ist.normalSayi(uret)));
+  return dizi;
+}
+
+function kur() {
+  const ctx = document.getElementById("mwGrafik");
+  grafik = new Chart(ctx, {
+    type: "scatter",
+    data: {
+      datasets: [
+        { label: "A Hastanesi", data: [], backgroundColor: Renk.cam, pointRadius: 6 },
+        { label: "B Hastanesi", data: [], backgroundColor: Renk.mercan, pointRadius: 6 }
+      ]
+    },
+    options: {
+      scales: {
+        x: { title: { display: true, text: "Taburcu süresi (gün)" }, min: 0, max: 30 },
+        y: { min: 0, max: 3, ticks: { callback: v => v === 1 ? "A" : v === 2 ? "B" : "" }, title: { display: true, text: "Hastane" } }
+      },
+      plugins: { legend: { position: "top" } }
+    }
+  });
+  guncelle();
+}
+
+function guncelle() {
+  const ayrim = +document.getElementById("ayrim").value;
+  document.getElementById("ayrimDeger").textContent = ayrim;
+
+  const A = grupUret(10, tohum);
+  const B = grupUret(10 + ayrim, tohum + 99);
+
+  grafik.data.datasets[0].data = A.map(x => ({ x, y: 1 }));
+  grafik.data.datasets[1].data = B.map(x => ({ x, y: 2 }));
+  grafik.update();
+
+  const r = Ist.mannWhitney(A, B);
+  document.getElementById("cU").textContent = Ist.bicim(r.U, 0);
+  document.getElementById("cP").textContent = Ist.pYazi(r.p);
+  document.getElementById("cKarar").textContent = r.p < 0.05 ? "Hastaneler farklı ✓" : "Ayırt edilemiyor";
+}
+
+document.getElementById("ayrim").addEventListener("input", guncelle);
+document.getElementById("yeni").addEventListener("click", () => { tohum = (tohum * 7919 + 13) % 2147483647; guncelle(); });
+window.addEventListener("load", kur);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marginal Homogeneity — Biyoistatistik Atlası</title>
+<meta name="description" content="Aynı kişilerde çok kategorili bir dağılımın önce/sonra kayması. Marginal Homogeneity (Stuart-Maxwell) testini interaktif öğren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="karar-agaci.html">Karar Ağacı</a>
+      <a href="tanimlayici.html">Tanımlayıcı</a>
+      <a href="korelasyon.html">Korelasyon</a>
+      <a href="regresyon.html">Regresyon</a>
+      <a href="ki-kare.html">Ki-Kare</a>
+      <a href="t-testi.html">t-Testi</a>
+      <a href="anova.html">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <div class="karar-yol">
+        <a href="karar-agaci.html" class="parca">Kategorik</a><span class="ok">→</span>
+        <span class="parca">&gt;2 Kategori</span><span class="ok">→</span>
+        <span class="parca">Bağımlı</span><span class="ok">→</span>
+        <span class="parca son">Marginal Homogeneity</span>
+      </div>
+      <h1>Marginal Homogeneity</h1>
+      <p class="ozet">Aynı hastaların hastalık evresini (Hafif / Orta / Ağır) bir yıl önce ve bugün kaydettin. Hastalığın <strong>genel dağılımı</strong> zamanla kaydı mı? Çok kategorili verilerde McNemar'ın karşılığı — <strong>Stuart-Maxwell testi.</strong></p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">1955–56</span>
+      <p class="kisi">Alan Stuart &<br>A. E. Maxwell</p>
+      <p>McNemar iki kategoriyle sınırlıydı. Stuart ve Maxwell, aynı fikri <strong>üç ya da daha çok kategoriye</strong> taşıdı: "kategorilerin genel dağılımı önceden sonraya değişti mi?" sorusunu tek bir testle yanıtladılar.</p>
+    </aside>
+  </header>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">"Marjinal" ne demek?</h2>
+    <p>
+      Bir çapraz tablonun kenarlarındaki (marjindeki) toplamlar, her kategorinin <strong>genel oranını</strong> verir.
+      Marginal homogeneity, "önceki dağılım ile sonraki dağılım aynı mı?" diye sorar. Dikkat: bu, "kimse değişmedi"
+      demek değildir — bireyler evre değiştirmiş olabilir. Test yalnızca <strong>toplu dağılımın</strong> kayıp kaymadığına
+      bakar. Örneğin yukarı geçen hasta sayısı aşağı geçenle dengeliyse, dağılım aynı kalır ve test anlamsız çıkar;
+      denge bozulunca (net bir yön oluşunca) test anlamlı olur.
+    </p>
+  </section>
+
+  <div class="deney-masasi">
+    <h3>🔬 Deney Masası — "Dağılımı bir yöne kaydır"</h3>
+    <p>100 hastanın evre dağılımını <strong>önce</strong> ve <strong>sonra</strong> için ayrı ayrı gör. Kaydırıcı, bir yıl
+      içinde hastaların ne kadarının <strong>ağırlaştığını</strong> ya da <strong>iyileştiğini</strong> belirler. Net bir
+      kayma oldukça Stuart-Maxwell istatistiği büyür.</p>
+
+    <div class="kaydirici-grubu">
+      <label for="kayma">Genel gidiş (− iyileşme · + kötüleşme) <output id="kaymaDeger">+15</output></label>
+      <input type="range" id="kayma" min="-30" max="30" step="3" value="15">
+    </div>
+
+    <div class="grafik-kutu"><canvas id="mhGrafik"></canvas></div>
+
+    <div class="sonuc-panosu">
+      <div class="sonuc-kutusu"><div class="deger" id="cChi">–</div><div class="ad">χ² (Stuart-Maxwell)</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cP">–</div><div class="ad">p değeri</div></div>
+      <div class="sonuc-kutusu karar"><div class="deger" id="cKarar">–</div><div class="ad">Karar</div></div>
+    </div>
+  </div>
+
+  <div class="ikiz-kart">
+    <div class="rozet">🔗</div>
+    <div class="ic">
+      <h3>İki kategorili hali: McNemar testi</h3>
+      <p>Yalnızca iki evre (ör. Hasta / Sağlıklı) olsaydı, marginal homogeneity tam olarak McNemar testine dönüşürdü. Stuart-Maxwell, McNemar'ın çok kategorili genellemesidir.</p>
+    </div>
+    <a class="dugme-ikiz" href="mcnemar.html">McNemar →</a>
+  </div>
+
+  <nav class="sayfa-gezinme">
+    <a href="cochran-q.html">← Cochran Q</a>
+    <a href="karar-agaci.html">Karar Ağacına dön →</a>
+  </nav>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Grafiklerdeki veriler öğretim için üretilmiş örnek verilerdir.
+</footer>
+
+<script src="js/ortak.js"></script>
+<script>
+let grafik;
+
+function kur() {
+  const ctx = document.getElementById("mhGrafik");
+  grafik = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Hafif", "Orta", "Ağır"],
+      datasets: [
+        { label: "Önce", data: [], backgroundColor: Renk.cam },
+        { label: "Sonra", data: [], backgroundColor: Renk.mercan }
+      ]
+    },
+    options: {
+      scales: {
+        x: { grid: { display: false }, title: { display: true, text: "Hastalık evresi" } },
+        y: { beginAtZero: true, title: { display: true, text: "Hasta sayısı" } }
+      },
+      plugins: { legend: { position: "top" } }
+    }
+  });
+  guncelle();
+}
+
+function guncelle() {
+  const kayma = +document.getElementById("kayma").value;
+  document.getElementById("kaymaDeger").textContent = (kayma > 0 ? "+" : "") + kayma;
+
+  // Başlangıç 3x3 geçiş tablosu (köşegen = değişmeyen), simetrik taban
+  // kayma>0: Hafif->Orta, Orta->Ağır artar; kayma<0 tersi
+  const t = [
+    [30, 0, 0],
+    [0, 25, 0],
+    [0, 0, 20]
+  ];
+  const g = Math.abs(kayma) / 3; // her yönde hareket eden hasta
+  if (kayma >= 0) {
+    t[0][1] = g; t[0][0] -= g;      // Hafif -> Orta
+    t[1][2] = g; t[1][1] -= g;      // Orta -> Ağır
+    t[1][0] = g * 0.3; t[1][1] -= g * 0.3; // biraz geri (gürültü)
+  } else {
+    t[1][0] = g; t[1][1] -= g;      // Orta -> Hafif
+    t[2][1] = g; t[2][2] -= g;      // Ağır -> Orta
+    t[0][1] = g * 0.3; t[0][0] -= g * 0.3;
+  }
+  // negatif hücreleri kırp
+  for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) t[i][j] = Math.max(0, Math.round(t[i][j]));
+
+  const once = [0, 1, 2].map(i => t[i][0] + t[i][1] + t[i][2]);       // satır toplamı
+  const sonra = [0, 1, 2].map(j => t[0][j] + t[1][j] + t[2][j]);      // sütun toplamı
+  grafik.data.datasets[0].data = once;
+  grafik.data.datasets[1].data = sonra;
+  grafik.update();
+
+  const r = Ist.stuartMaxwell3(t);
+  document.getElementById("cChi").textContent = Ist.bicim(r.chi, 2);
+  document.getElementById("cP").textContent = Ist.pYazi(r.p);
+  document.getElementById("cKarar").textContent = r.p < 0.05 ? "Dağılım kaydı ✓" : "Dağılım sabit sayılır";
+}
+
+document.getElementById("kayma").addEventListener("input", guncelle);
+window.addEventListener("load", kur);
+</script>
+
+</body>
+</html>

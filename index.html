@@ -17,6 +17,7 @@
     <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
     <div class="menu-serit">
       <a href="index.html" class="aktif">Ana Sayfa</a>
+      <a href="karar-agaci.html">Karar Ağacı</a>
       <a href="tanimlayici.html">Tanımlayıcı</a>
       <a href="korelasyon.html">Korelasyon</a>
       <a href="regresyon.html">Regresyon</a>
@@ -31,7 +32,7 @@
 
   <header class="sayfa-giris">
     <div>
-      
+      <span class="etiket">Lise düzeyi · Sağlık örnekleri · İnteraktif</span>
       <h1>Her istatistik testin bir hikâyesi var.</h1>
       <p class="ozet">
         Bira fabrikasında çalışan bir kimyager, hastane koğuşlarını grafiklerle değiştiren bir hemşire,
@@ -100,6 +101,64 @@
       <p>İki değil üç, dört, beş grup varsa? Tarlada doğup hastaneye taşınan yöntem: tek testle hepsini karşılaştırmak.</p>
     </a>
 
+  </div>
+
+  <section class="kart" style="background:linear-gradient(135deg,#E8F6F3,#FDF3EE);border:2px solid var(--cam-acik)">
+    <h2 style="margin-top:0">🧭 Hangi testi seçmeliyim?</h2>
+    <p>
+      Altı temel duraktan sonra iş "doğru testi seçmeye" gelir. Bunun bir haritası var: verin <strong>sayı mı kategori mi</strong>,
+      <strong>kaç grup</strong> var ve gruplar <strong>bağımlı mı</strong>? Bu üç–dört soru seni tam 13 testin arasından doğru olana götürür.
+      İnteraktif karar ağacında sorulara tıkla, önerilen teste ve onun sayfasına anında ulaş.
+    </p>
+    <p style="margin-bottom:0">
+      <a href="karar-agaci.html" style="background:var(--cam);color:#fff;border-radius:999px;padding:10px 22px;font-weight:800;text-decoration:none;display:inline-block">Karar Ağacını Aç →</a>
+    </p>
+  </section>
+
+  <h2>Tüm Testler Kataloğu</h2>
+  <p class="ozet">Karar ağacındaki her test için ayrı bir sayfa: hikâyesi, sağlıktan bir örnek ve interaktif deney masası. Parametrik testlerin sıra temelli <strong>ikizleri</strong> yan yana anlatılır.</p>
+
+  <div class="zaman-seridi">
+    <a class="serit-karti" href="paired-t.html">
+      <span class="yil-rozet">Sayısal · 2 grup · bağımlı</span>
+      <h3>Paired t · Wilcoxon</h3>
+      <p>Aynı hastalarda önce/sonra karşılaştırması. Her hasta kendi kontrolüdür; Wilcoxon ise aykırı değere dayanıklı ikizi.</p>
+    </a>
+    <a class="serit-karti" href="mann-whitney.html">
+      <span class="yil-rozet">Sayısal · 2 grup · bağımsız</span>
+      <h3>Student t · Mann-Whitney</h3>
+      <p>İki ayrı grubu karşılaştırmak. Mann-Whitney, değerleri birlikte sıralayarak dağılım varsayımı olmadan çalışır.</p>
+    </a>
+    <a class="serit-karti" href="repeated-anova.html">
+      <span class="yil-rozet">Sayısal · &gt;2 grup · bağımlı</span>
+      <h3>Repeated ANOVA · Friedman</h3>
+      <p>Aynı hastaları birçok kez ölçmek. Hastalar arası farkı ayırıp zaman etkisini net görmek; Friedman sıra temelli ikizi.</p>
+    </a>
+    <a class="serit-karti" href="kruskal-wallis.html">
+      <span class="yil-rozet">Sayısal · &gt;2 grup · bağımsız</span>
+      <h3>One-way ANOVA · Kruskal-Wallis</h3>
+      <p>Üç ve daha çok bağımsız grup. Kruskal-Wallis hepsini tek sıraya dizip grup sıra toplamlarını karşılaştırır.</p>
+    </a>
+    <a class="serit-karti" href="mcnemar.html">
+      <span class="yil-rozet">Kategorik · 2×2 · bağımlı</span>
+      <h3>McNemar</h3>
+      <p>Aynı kişilerde önce/sonra ikili sonuç. Sadece fikir değiştirenler bilgi taşır; program işe yaradı mı?</p>
+    </a>
+    <a class="serit-karti" href="fisher.html">
+      <span class="yil-rozet">Kategorik · 2×2 · küçük örneklem</span>
+      <h3>Fisher Kesin Testi</h3>
+      <p>Az sayıda hastada ki-kare yanıltır. Fisher olasılığı bir yaklaşımla değil, tam olarak hesaplar.</p>
+    </a>
+    <a class="serit-karti" href="cochran-q.html">
+      <span class="yil-rozet">Kategorik · &gt;2 koşul · bağımlı</span>
+      <h3>Cochran Q</h3>
+      <p>Aynı hastalarda üç ikili koşul (ör. üç tanı testi). McNemar'ın çok koşullu genellemesi.</p>
+    </a>
+    <a class="serit-karti" href="marginal-homogenlik.html">
+      <span class="yil-rozet">Kategorik · &gt;2 kategori · bağımlı</span>
+      <h3>Marginal Homogeneity</h3>
+      <p>Aynı kişilerde çok kategorili dağılımın kayması (ör. hastalık evresi). Stuart-Maxwell testi.</p>
+    </a>
   </div>
 
   <section class="kart vurgu-leylak">

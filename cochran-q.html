@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cochran Q Testi — Biyoistatistik Atlası</title>
+<meta name="description" content="Aynı kişilerde üç veya daha fazla ikili koşulu karşılaştırmak. McNemar'ın genellemesi Cochran Q'yu interaktif öğren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="karar-agaci.html">Karar Ağacı</a>
+      <a href="tanimlayici.html">Tanımlayıcı</a>
+      <a href="korelasyon.html">Korelasyon</a>
+      <a href="regresyon.html">Regresyon</a>
+      <a href="ki-kare.html">Ki-Kare</a>
+      <a href="t-testi.html">t-Testi</a>
+      <a href="anova.html">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <div class="karar-yol">
+        <a href="karar-agaci.html" class="parca">Kategorik</a><span class="ok">→</span>
+        <span class="parca">2 Kategori</span><span class="ok">→</span>
+        <span class="parca">&gt;2 Grup · Bağımlı</span><span class="ok">→</span>
+        <span class="parca son">Cochran Q</span>
+      </div>
+      <h1>Cochran Q Testi</h1>
+      <p class="ozet">Aynı hastalara <strong>üç farklı tanı testi</strong> uyguladın; her biri ya pozitif ya negatif. Üç testin pozitiflik oranları birbirinden farklı mı? McNemar'ın ikiden çok koşula genişlemiş hali.</p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">1950</span>
+      <p class="kisi">William G. Cochran</p>
+      <p>Deney tasarımı ve örnekleme kuramının önemli ismi. McNemar'ın "aynı kişilerde önce/sonra" fikrini <strong>üç, dört, beş koşula</strong> taşıyarak ikili verilerde tekrarlı ölçüm karşılaştırmasını mümkün kıldı.</p>
+    </aside>
+  </header>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">Fikir: aynı hasta, birçok evet/hayır</h2>
+    <p>
+      Her hasta için birden çok ikili sonuç var (Test A: +, Test B: −, Test C: +...). Cochran Q sorar: bu koşulların
+      <strong>pozitiflik oranları</strong> birbirinden anlamlı biçimde farklı mı? McNemar gibi, her zaman aynı cevabı
+      veren hastalar (hepsinde + ya da hepsinde −) bilgi taşımaz; ayırt edici bilgi, <strong>koşuldan koşula değişen</strong>
+      hastalardan gelir. Bir test diğerlerinden belirgin biçimde daha sık pozitifse Q büyür.
+    </p>
+  </section>
+
+  <div class="deney-masasi">
+    <h3>🔬 Deney Masası — "Bir testi diğerlerinden ayır"</h3>
+    <p>Üç tanı testinin <strong>pozitiflik oranını</strong> ayrı ayrı ayarla. Çubuklar 20 hastadaki pozitif sayısını
+      gösterir. Testler birbirine benzedikçe Q küçük, biri ayrıştıkça Q büyük ve p küçük olur.</p>
+
+    <div class="kaydirici-grubu">
+      <label for="pA">Test A pozitiflik oranı (%) <output id="pADeger">50</output></label>
+      <input type="range" id="pA" min="0" max="100" step="5" value="50">
+    </div>
+    <div class="kaydirici-grubu">
+      <label for="pB">Test B pozitiflik oranı (%) <output id="pBDeger">55</output></label>
+      <input type="range" id="pB" min="0" max="100" step="5" value="55">
+    </div>
+    <div class="kaydirici-grubu">
+      <label for="pC">Test C pozitiflik oranı (%) <output id="pCDeger">85</output></label>
+      <input type="range" id="pC" min="0" max="100" step="5" value="85">
+    </div>
+
+    <div class="grafik-kutu"><canvas id="cochranGrafik"></canvas></div>
+
+    <div class="sonuc-panosu">
+      <div class="sonuc-kutusu"><div class="deger" id="cQ">–</div><div class="ad">Q istatistiği</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cP">–</div><div class="ad">p değeri</div></div>
+      <div class="sonuc-kutusu karar"><div class="deger" id="cKarar">–</div><div class="ad">Karar</div></div>
+    </div>
+  </div>
+
+  <div class="ikiz-kart">
+    <div class="rozet">🔗</div>
+    <div class="ic">
+      <h3>İki koşullu hali: McNemar testi</h3>
+      <p>Sadece iki koşulun (ör. önce/sonra) olsaydı, Cochran Q tam olarak McNemar testine indirgenirdi. Q, McNemar'ın çok koşullu ağabeyidir.</p>
+    </div>
+    <a class="dugme-ikiz" href="mcnemar.html">McNemar →</a>
+  </div>
+
+  <nav class="sayfa-gezinme">
+    <a href="fisher.html">← Fisher</a>
+    <a href="marginal-homogenlik.html">Sıradaki: Marginal Homogeneity →</a>
+  </nav>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Grafiklerdeki veriler öğretim için üretilmiş örnek verilerdir.
+</footer>
+
+<script src="js/ortak.js"></script>
+<script>
+const nHasta = 20;
+let grafik;
+
+function kur() {
+  const ctx = document.getElementById("cochranGrafik");
+  grafik = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Test A", "Test B", "Test C"],
+      datasets: [{ label: "Pozitif hasta sayısı", data: [], backgroundColor: [Renk.cam, Renk.gunes, Renk.leylak] }]
+    },
+    options: {
+      scales: {
+        x: { grid: { display: false } },
+        y: { beginAtZero: true, max: nHasta, title: { display: true, text: "Pozitif sayısı (/20)" } }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+  guncelle();
+}
+
+function guncelle() {
+  const pA = +document.getElementById("pA").value / 100;
+  const pB = +document.getElementById("pB").value / 100;
+  const pC = +document.getElementById("pC").value / 100;
+  document.getElementById("pADeger").textContent = Math.round(pA * 100);
+  document.getElementById("pBDeger").textContent = Math.round(pB * 100);
+  document.getElementById("pCDeger").textContent = Math.round(pC * 100);
+
+  const uret = Ist.rastgele(64);
+  const matris = [];
+  for (let i = 0; i < nHasta; i++) {
+    // hastanın genel "pozitiflik eğilimi" -> koşullar korelasyonlu (tekrarlı ölçüm)
+    const egilim = uret();
+    matris.push([
+      egilim < pA ? 1 : 0,
+      egilim < pB ? 1 : 0,
+      egilim < pC ? 1 : 0
+    ]);
+  }
+
+  const r = Ist.cochranQ(matris);
+  grafik.data.datasets[0].data = r.Cj;
+  grafik.update();
+
+  document.getElementById("cQ").textContent = Ist.bicim(r.Q, 2);
+  document.getElementById("cP").textContent = Ist.pYazi(r.p);
+  document.getElementById("cKarar").textContent = r.p < 0.05 ? "Testler farklı ✓" : "Ayırt edilemiyor";
+}
+
+["pA", "pB", "pC"].forEach(id => document.getElementById(id).addEventListener("input", guncelle));
+window.addEventListener("load", kur);
+</script>
+
+</body>
+</html>

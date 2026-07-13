@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paired t Test — Biyoistatistik Atlası</title>
+<meta name="description" content="Aynı hastalarda önce/sonra karşılaştırması. Eşleştirilmiş t testini interaktif olarak öğren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="karar-agaci.html">Karar Ağacı</a>
+      <a href="tanimlayici.html">Tanımlayıcı</a>
+      <a href="korelasyon.html">Korelasyon</a>
+      <a href="regresyon.html">Regresyon</a>
+      <a href="ki-kare.html">Ki-Kare</a>
+      <a href="t-testi.html">t-Testi</a>
+      <a href="anova.html">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <div class="karar-yol">
+        <a href="karar-agaci.html" class="parca">Sayısal</a><span class="ok">→</span>
+        <span class="parca">2 Grup</span><span class="ok">→</span>
+        <span class="parca">Bağımlı</span><span class="ok">→</span>
+        <span class="parca son">Paired t</span>
+      </div>
+      <h1>Paired t Test</h1>
+      <p class="ozet">Bir tansiyon ilacını denedin. <strong>Aynı 12 hastanın</strong> tansiyonunu tedaviden önce ve sonra ölçtün. Düşüş gerçek mi? İşin sırrı: her hasta kendi kontrolüdür.</p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">1908</span>
+      <p class="kisi">William Gosset<br>("Student")</p>
+      <p>t testinin eşleştirilmiş biçimi. Aynı denek üzerinde önce/sonra ölçüm yapıldığında, kişiler arası farkları <strong>saf dışı bırakarak</strong> çok daha güçlü bir karşılaştırma sağlar.</p>
+    </aside>
+  </header>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">Neden "eşleştirilmiş" güçlüdür?</h2>
+    <p>
+      İki ayrı grup karşılaştırsaydın, kişiler arası doğal farklar (kimi zaten yüksek tansiyonlu, kimi düşük) sonucu
+      bulanıklaştırırdı. Ama <strong>aynı kişiyi</strong> önce ve sonra ölçünce, bu kişisel farklar kendiliğinden yok olur.
+      Geriye sadece <strong>her hastadaki değişim</strong> kalır. Bu yüzden paired t, aynı sayıda hastayla bağımsız t'den
+      daha hassastır — küçük ama tutarlı bir etkiyi bile yakalayabilir.
+    </p>
+  </section>
+
+  <h2>Fikir: farklara bak, kişilere değil</h2>
+  <div class="konusma">
+    <p style="margin-top:0">Paired t test aslında tek bir şeye bakar: <strong>her hastanın "sonra − önce" farkı.</strong></p>
+    <p>Sonra bu farkların ortalamasının sıfırdan (yani "hiç değişim yok"tan) ne kadar uzak olduğunu ölçer.</p>
+    <p style="margin-bottom:0">Farklar tutarlı biçimde aynı yöndeyse (herkeste düşüş varsa) test güçlenir. Kimi artıp kimi azalıyorsa etki belirsizleşir.</p>
+  </div>
+
+  <div class="deney-masasi">
+    <h3>🔬 Deney Masası — "Her hasta bir çizgi"</h3>
+    <p>Soldaki nokta her hastanın <strong>önceki</strong>, sağdaki <strong>sonraki</strong> tansiyonu; çizgi ikisini birleştirir.
+      Ortalama düşüşü ve hastadan hastaya <strong>tutarlılığı</strong> değiştir. Çizgiler hep aynı yöne indikçe test güçlenir.</p>
+
+    <div class="kaydirici-grubu">
+      <label for="dusus">Ortalama tansiyon düşüşü (mmHg) <output id="dususDeger">8</output></label>
+      <input type="range" id="dusus" min="0" max="25" step="1" value="8">
+    </div>
+    <div class="kaydirici-grubu">
+      <label for="tutarsizlik">Tutarsızlık (kişiden kişiye oynama) <output id="tutarsizlikDeger">4</output></label>
+      <input type="range" id="tutarsizlik" min="1" max="20" step="1" value="4">
+    </div>
+
+    <div class="grafik-kutu"><canvas id="pairedGrafik"></canvas></div>
+
+    <div class="sonuc-panosu">
+      <div class="sonuc-kutusu"><div class="deger" id="cFark">–</div><div class="ad">Ortalama fark</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cT">–</div><div class="ad">t değeri</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cP">–</div><div class="ad">p değeri</div></div>
+      <div class="sonuc-kutusu karar"><div class="deger" id="cKarar">–</div><div class="ad">Karar</div></div>
+    </div>
+  </div>
+
+  <div class="ikiz-kart">
+    <div class="rozet">👯</div>
+    <div class="ic">
+      <h3>İkizi: Wilcoxon işaretli sıralar testi</h3>
+      <p>Farklar normal dağılmıyorsa ya da elinde birkaç aşırı değer varsa, paired t yerine onun sıra temelli ikizini kullan.</p>
+    </div>
+    <a class="dugme-ikiz" href="wilcoxon.html">Wilcoxon →</a>
+  </div>
+
+  <nav class="sayfa-gezinme">
+    <a href="karar-agaci.html">← Karar Ağacı</a>
+    <a href="wilcoxon.html">Sıradaki: Wilcoxon →</a>
+  </nav>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Grafiklerdeki veriler öğretim için üretilmiş örnek verilerdir.
+</footer>
+
+<script src="js/ortak.js"></script>
+<script>
+const nHasta = 12;
+const oncekiTaban = [150,145,160,138,155,142,148,158,140,152,146,144];
+let grafik;
+
+function kur() {
+  const ctx = document.getElementById("pairedGrafik");
+  grafik = new Chart(ctx, {
+    type: "line",
+    data: { datasets: [] },
+    options: {
+      scales: {
+        x: { type: "category", labels: ["Önce", "Sonra"], grid: { display: false } },
+        y: { title: { display: true, text: "Sistolik tansiyon (mmHg)" }, min: 110, max: 175 }
+      },
+      plugins: { legend: { display: false } },
+      elements: { point: { radius: 4 } }
+    }
+  });
+  guncelle();
+}
+
+function guncelle() {
+  const dusus = +document.getElementById("dusus").value;
+  const tutarsizlik = +document.getElementById("tutarsizlik").value;
+  document.getElementById("dususDeger").textContent = dusus;
+  document.getElementById("tutarsizlikDeger").textContent = tutarsizlik;
+
+  const uret = Ist.rastgele(42);
+  const onceler = [], sonralar = [];
+  const setler = [];
+  for (let i = 0; i < nHasta; i++) {
+    const once = oncekiTaban[i];
+    const kisiselDusus = dusus + tutarsizlik * Ist.normalSayi(uret);
+    const sonra = once - kisiselDusus;
+    onceler.push(once); sonralar.push(sonra);
+    const artti = sonra > once;
+    setler.push({
+      data: [{ x: "Önce", y: once }, { x: "Sonra", y: sonra }],
+      borderColor: artti ? Renk.mercan : Renk.cam,
+      backgroundColor: artti ? Renk.mercan : Renk.cam,
+      borderWidth: 2, tension: 0
+    });
+  }
+  grafik.data.datasets = setler;
+  grafik.update();
+
+  const r = Ist.esliT(onceler, sonralar);
+  document.getElementById("cFark").textContent = Ist.bicim(-r.md, 1) + " mmHg";
+  document.getElementById("cT").textContent = Ist.bicim(Math.abs(r.t), 2);
+  document.getElementById("cP").textContent = Ist.pYazi(r.p);
+  document.getElementById("cKarar").textContent = r.p < 0.05 ? "Düşüş gerçek ✓" : "Belirsiz — şans olabilir";
+}
+
+["dusus", "tutarsizlik"].forEach(id => document.getElementById(id).addEventListener("input", guncelle));
+window.addEventListener("load", kur);
+</script>
+
+</body>
+</html>

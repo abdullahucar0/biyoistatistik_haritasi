@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Friedman Testi — Biyoistatistik Atlası</title>
+<meta name="description" content="Aynı kişilerde üç koşulu sıralarla karşılaştırmak. Repeated ANOVA'nın sıra temelli ikizi Friedman'ı interaktif öğren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/stil.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="ust-menu">
+  <div class="ic">
+    <a class="logo" href="index.html">Biyoistatistik <span>Atlası</span></a>
+    <div class="menu-serit">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="karar-agaci.html">Karar Ağacı</a>
+      <a href="tanimlayici.html">Tanımlayıcı</a>
+      <a href="korelasyon.html">Korelasyon</a>
+      <a href="regresyon.html">Regresyon</a>
+      <a href="ki-kare.html">Ki-Kare</a>
+      <a href="t-testi.html">t-Testi</a>
+      <a href="anova.html">ANOVA</a>
+    </div>
+  </div>
+</nav>
+
+<main class="icerik">
+
+  <header class="sayfa-giris">
+    <div>
+      <div class="karar-yol">
+        <a href="karar-agaci.html" class="parca">Sayısal</a><span class="ok">→</span>
+        <span class="parca">&gt;2 Grup</span><span class="ok">→</span>
+        <span class="parca">Bağımlı</span><span class="ok">→</span>
+        <span class="parca son">Friedman</span>
+      </div>
+      <h1>Friedman Testi</h1>
+      <p class="ozet">Aynı hastalara üç farklı ağrı kesici denendi. Hangisinin daha iyi olduğunu, <strong>her hastanın kendi içinde yaptığı sıralamaya</strong> bakarak buluruz. Tekrarlı ANOVA'nın sıra temelli, dağılımdan bağımsız ikizi.</p>
+    </div>
+    <aside class="zaman-pulu">
+      <span class="yil">1937</span>
+      <p class="kisi">Milton Friedman</p>
+      <p>Sonradan Nobel'li ünlü iktisatçı. İstatistik alanında da iz bıraktı: aynı deneklerde birçok koşulu, ham puanlar yerine <strong>her denek içindeki sıralamayla</strong> karşılaştırma yöntemini geliştirdi.</p>
+    </aside>
+  </header>
+
+  <section class="kart vurgu-yesil">
+    <h2 style="margin-top:0">Fikir: her hasta kendi içinde sıralar</h2>
+    <p>
+      Ham puanları karşılaştırmak yerine, <strong>her hastanın kendi üç ölçümünü</strong> 1-2-3 diye sıralarız
+      (en iyi ilaca 1, en kötüye 3). Sonra her ilacın tüm hastalardan aldığı sıraları toplarız. Bir ilaç sürekli
+      "1. sıraya" konuyorsa toplamı küçük olur — açık kazanan odur. Hastalar arası genel farklar (kimi çok ağrılı,
+      kimi az) bu yöntemde kendiliğinden silinir, çünkü herkes yalnızca kendi içinde sıralanır.
+    </p>
+  </section>
+
+  <div class="deney-masasi">
+    <h3>🔬 Deney Masası — "Bir ilaç sürekli birinci olsun"</h3>
+    <p>Üç ilacın <strong>gerçek etki farkını</strong> ve hastalar arası genel gürültüyü değiştir. Çubuklar her ilacın
+      toplam sırasını gösterir; biri belirgin biçimde öne çıktıkça Friedman istatistiği (Q) büyür, p düşer.</p>
+
+    <div class="kaydirici-grubu">
+      <label for="etkiFark">İlaçlar arası gerçek etki farkı <output id="etkiFarkDeger">1,5</output></label>
+      <input type="range" id="etkiFark" min="0" max="30" step="1" value="15">
+    </div>
+    <div class="kaydirici-grubu">
+      <label for="gurultu">Hastadan hastaya rastgelelik <output id="gurultuDeger">1,0</output></label>
+      <input type="range" id="gurultu" min="2" max="30" step="1" value="10">
+    </div>
+
+    <div class="grafik-kutu"><canvas id="friedmanGrafik"></canvas></div>
+
+    <div class="sonuc-panosu">
+      <div class="sonuc-kutusu"><div class="deger" id="cQ">–</div><div class="ad">Q istatistiği</div></div>
+      <div class="sonuc-kutusu"><div class="deger" id="cP">–</div><div class="ad">p değeri</div></div>
+      <div class="sonuc-kutusu karar"><div class="deger" id="cKarar">–</div><div class="ad">Karar</div></div>
+    </div>
+  </div>
+
+  <div class="ikiz-kart">
+    <div class="rozet">👯</div>
+    <div class="ic">
+      <h3>İkizi: Tekrarlı ölçümler ANOVA</h3>
+      <p>Puanlar normal dağılıyorsa ham değerleri kullanan tekrarlı ANOVA daha güçlüdür.</p>
+    </div>
+    <a class="dugme-ikiz" href="repeated-anova.html">Repeated ANOVA →</a>
+  </div>
+
+  <nav class="sayfa-gezinme">
+    <a href="repeated-anova.html">← Repeated ANOVA</a>
+    <a href="kruskal-wallis.html">Sıradaki: Kruskal-Wallis →</a>
+  </nav>
+
+</main>
+
+<footer class="dipnot">
+  <a class="ileri" href="#" title="Yakında">🚧 İleri Biyoistatistik Atlası — yakında</a><br>
+  Biyoistatistik Atlası · Grafiklerdeki veriler öğretim için üretilmiş örnek verilerdir.
+</footer>
+
+<script src="js/ortak.js"></script>
+<script>
+const nHasta = 12;
+let grafik;
+
+function kur() {
+  const ctx = document.getElementById("friedmanGrafik");
+  grafik = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["İlaç A", "İlaç B", "İlaç C"],
+      datasets: [{ label: "Toplam sıra (küçük = iyi)", data: [], backgroundColor: [Renk.cam, Renk.gunes, Renk.leylak] }]
+    },
+    options: {
+      indexAxis: "y",
+      scales: {
+        x: { title: { display: true, text: "Toplam sıra puanı" }, beginAtZero: true },
+        y: { grid: { display: false } }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+  guncelle();
+}
+
+function guncelle() {
+  const etki = +document.getElementById("etkiFark").value;
+  const gurultu = +document.getElementById("gurultu").value;
+  document.getElementById("etkiFarkDeger").textContent = Ist.bicim(etki / 10, 1);
+  document.getElementById("gurultuDeger").textContent = Ist.bicim(gurultu / 10, 1);
+
+  const uret = Ist.rastgele(31);
+  const matris = [];
+  for (let i = 0; i < nHasta; i++) {
+    const taban = gurultu * Ist.normalSayi(uret); // hastanın genel seviyesi (etkisiz)
+    // A en iyi (düşük ağrı), C en kötü — gerçek etki farkı "etki" kadar
+    const A = taban + 0 + 0.4 * gurultu * Ist.normalSayi(uret);
+    const B = taban + etki / 10 * 3 + 0.4 * gurultu * Ist.normalSayi(uret);
+    const C = taban + etki / 10 * 6 + 0.4 * gurultu * Ist.normalSayi(uret);
+    matris.push([A, B, C]);
+  }
+
+  const r = Ist.friedman(matris);
+  grafik.data.datasets[0].data = r.Rj;
+  grafik.update();
+
+  document.getElementById("cQ").textContent = Ist.bicim(r.Q, 2);
+  document.getElementById("cP").textContent = Ist.pYazi(r.p);
+  document.getElementById("cKarar").textContent = r.p < 0.05 ? "İlaçlar farklı ✓" : "Ayırt edilemiyor";
+}
+
+["etkiFark", "gurultu"].forEach(id => document.getElementById(id).addEventListener("input", guncelle));
+window.addEventListener("load", kur);
+</script>
+
+</body>
+</html>
